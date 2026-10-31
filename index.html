@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<title>Clientes</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--line:#334155;--tx:#f1f5f9;--mut:#94a3b8;--acc:#22c55e;--btn:#334155}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px system-ui,sans-serif;padding:12px;padding-bottom:80px}
+h1{font-size:20px;margin:4px 0 12px}
+textarea,input,select{width:100%;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
+textarea{min-height:90px;resize:vertical}
+.row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
+button{background:var(--btn);color:var(--tx);border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600}
+button.p{background:var(--acc);color:#052e16}
+button.on{outline:2px solid var(--acc)}
+.grow{flex:1}
+small{color:var(--mut)}
+.wrap{overflow-x:auto;margin-top:8px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden}
+th,td{padding:12px 8px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-size:13px;color:var(--mut);text-transform:uppercase}
+td.n{color:var(--mut);width:34px}
+td.c{font-family:ui-monospace,monospace;font-weight:700;cursor:pointer}
+td.c:active,td.ok{background:var(--acc);color:#052e16}
+td.x{width:40px;text-align:center;color:var(--mut)}
+#t{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#052e16;padding:10px 18px;border-radius:20px;font-weight:700;opacity:0;transition:.2s;pointer-events:none}
+#t.s{opacity:1}
+.empty{text-align:center;color:var(--mut);padding:30px}
+</style>
+</head>
+<body>
+<h1>📦 Clientes</h1>
+
+<textarea id="in" placeholder="Cole aqui, um cliente por linha:&#10;Maria Souza  12345  abc123&#10;João;98765;xyz789"></textarea>
+<div class="row">
+  <select id="ord" class="grow">
+    <option value="cs">Ordem colada: Nome · Código · Senha</option>
+    <option value="sc">Ordem colada: Nome · Senha · Código</option>
+  </select>
+  <button class="p" id="add">Adicionar</button>
+</div>
+
+<div class="row">
+  <input id="q" class="grow" placeholder="🔍 Buscar nome ou código">
+</div>
+<div class="row">
+  <button id="bo" class="on">1º → último</button>
+  <button id="ba">A → Z</button>
+  <button id="bu">Último → 1º</button>
+  <button id="clr">Limpar tudo</button>
+</div>
+<small id="cnt"></small>
+
+<div class="wrap"><table>
+  <thead><tr><th>#</th><th>Nome</th><th>Código</th><th>Senha</th><th></th></tr></thead>
+  <tbody id="tb"></tbody>
+</table></div>
+<div id="t">Copiado!</div>
+
+<script>
+const K='clientes_v1';
+let data=[],mode='o';
+try{data=JSON.parse(localStorage.getItem(K))||[]}catch(e){data=[]}
+const $=id=>document.getElementById(id);
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function parse(line){
+  let p;
+  if(/\t|;|\|/.test(line)) p=line.split(/\t|;|\|/);
+  else if((line.match(/,/g)||[]).length>=2) p=line.split(',');
+  else if(/\s-\s/.test(line)) p=line.split(/\s-\s/);
+  else if(/\s{2,}/.test(line)) p=line.trim().split(/\s{2,}/);
+  else p=line.trim().split(/\s+/);
+  p=p.map(s=>s.trim()).filter(Boolean);
+  if(p.length<3) return null;
+  const b=p.pop(),a=p.pop(),nome=p.join(' ');
+  return $('ord').value==='cs'?{nome,codigo:a,senha:b}:{nome,codigo:b,senha:a};
+}
+$('add').onclick=()=>{
+  let n=0,bad=0;
+  $('in').value.split('\n').forEach(l=>{
+    if(!l.trim())return;
+    if(/nome/i.test(l)&&/senha/i.test(l))return;
+    const r=parse(l);
+    if(r){data.push(r);n++}else bad++;
+  });
+  if(n){save();$('in').value=''}
+  render();
+  toast(n?`${n} adicionado(s)`+(bad?` · ${bad} ignorado(s)`:''):'Nada reconhecido');
+};
+function view(){
+  let l=data.map((r,i)=>({...r,i}));
+  const q=$('q').value.trim().toLowerCase();
+  if(q)l=l.filter(r=>r.nome.toLowerCase().includes(q)||r.codigo.toLowerCase().includes(q));
+  if(mode==='a')l.sort((x,y)=>x.nome.localeCompare(y.nome,'pt-BR',{sensitivity:'base'}));
+  if(mode==='u')l.reverse();
+  return l;
+}
+function render(){
+  const l=view();
+  $('tb').innerHTML=l.length?l.map(r=>`<tr><td class="n">${r.i+1}</td><td>${esc(r.nome)}</td><td class="c" data-v="${esc(r.codigo)}">${esc(r.codigo)}</td><td class="c" data-v="${esc(r.senha)}">${esc(r.senha)}</td><td class="x" data-d="${r.i}">✕</td></tr>`).join(''):'<tr><td colspan="5" class="empty">Nenhum cliente ainda</td></tr>';
+  $('cnt').textContent=data.length+' cliente(s) · toque no código ou senha para copiar';
+  [['bo','o'],['ba','a'],['bu','u']].forEach(([id,m])=>$(id).classList.toggle('on',mode===m));
+}
+function toast(m){const t=$('t');t.textContent=m;t.classList.add('s');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('s'),1200)}
+async function copy(v){
+  try{await navigator.clipboard.writeText(v)}
+  catch(e){const a=document.createElement('textarea');a.value=v;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}
+}
+$('tb').onclick=async e=>{
+  const c=e.target.closest('td.c'),x=e.target.closest('td.x');
+  if(c){await copy(c.dataset.v);c.classList.add('ok');setTimeout(()=>c.classList.remove('ok'),400);toast('Copiado: '+c.dataset.v)}
+  if(x&&confirm('Apagar este cliente?')){data.splice(+x.dataset.d,1);save();render()}
+};
+$('bo').onclick=()=>{mode='o';render()};
+$('ba').onclick=()=>{mode='a';render()};
+$('bu').onclick=()=>{mode='u';render()};
+$('q').oninput=render;
+$('clr').onclick=()=>{if(data.length&&confirm('Apagar TODOS os clientes?')){data=[];save();render()}};
+render();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
