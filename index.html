@@ -66,7 +66,7 @@ td.x{width:40px;text-align:center;color:var(--mut)}
 const K='clientes_v1';
 let data=[],mode='o';
 try{data=JSON.parse(localStorage.getItem(K))||[]}catch(e){data=[]}
-data.forEach(r=>{r.codigo=String(r.codigo).replace(/[\s.]/g,'');r.senha=String(r.senha).replace(/[\s.]/g,'')});
+data.forEach(r=>{r.codigo=String(r.codigo).replace(/[^\p{L}\p{N}]/gu,'');r.senha=String(r.senha).replace(/[^\p{L}\p{N}]/gu,'')});
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 const $=id=>document.getElementById(id);
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}};
@@ -81,7 +81,7 @@ function parse(line){
   else p=line.trim().split(/\s+/);
   p=p.map(s=>s.trim()).filter(Boolean);
   if(p.length<3) return null;
-  const lim=v=>v.replace(/[\s.]/g,'');
+  const lim=v=>v.replace(/[^\p{L}\p{N}]/gu,'');
   const b=lim(p.pop()),a=lim(p.pop()),nome=p.join(' ');
   return $('ord').value==='cs'?{nome,codigo:a,senha:b}:{nome,codigo:b,senha:a};
 }
