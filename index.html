@@ -61,7 +61,7 @@ input[type=file]{display:none}
 </head>
 <body>
 <main>
-<h1>📦 Clientes</h1>
+<h1>📦 Clientes <small>v7</small></h1>
 
 <div id="panel">
   <div id="who"><span id="nm">—</span><small id="pos"></small></div>
@@ -296,7 +296,11 @@ document.addEventListener('keydown',e=>{
 });
 
 render();
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator){
+  const had=navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window._r){window._r=1;location.reload()}});
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{});
+}
 </script>
 </body>
 </html>
