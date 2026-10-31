@@ -124,7 +124,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 let data=[],cfg={auto:false,ord:'cs',mode:'o'},cur=null;
 try{data=JSON.parse(localStorage.getItem(K))||[]}catch(e){}
 try{Object.assign(cfg,JSON.parse(localStorage.getItem(KC))||{})}catch(e){}
-data.forEach(r=>{r.codigo=clean(r.codigo);r.senha=clean(r.senha);if(!r.id)r.id=uid()});
+data.forEach(r=>{r.codigo=clean(r.codigo);r.senha=String(r.senha==null?'':r.senha);if(!r.id)r.id=uid()});
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}};
 const saveCfg=()=>{try{localStorage.setItem(KC,JSON.stringify(cfg))}catch(e){}};
@@ -152,9 +152,11 @@ function parse(line){
   else p=line.trim().split(/\s+/);
   p=p.map(s=>s.trim()).filter(Boolean);
   if(p.length<3)return null;
-  const b=clean(p.pop()),a=clean(p.pop()),nome=p.join(' ');
-  if(!a||!b)return null;
-  return $('ord').value==='cs'?{id:uid(),nome,codigo:a,senha:b}:{id:uid(),nome,codigo:b,senha:a};
+  const b=p.pop(),a=p.pop(),nome=p.join(' ');
+  const cs=$('ord').value==='cs';
+  const codigo=clean(cs?a:b),senha=(cs?b:a).trim();
+  if(!codigo||!senha)return null;
+  return {id:uid(),nome,codigo,senha};
 }
 function addText(txt){
   let n=0,bad=0;
@@ -236,7 +238,7 @@ $('tb').onclick=e=>{
   if(b&&b.dataset.a==='e'){
     const r=data.find(x=>x.id===id);
     const v=prompt('Nome ; Código ; Senha',`${r.nome} ; ${r.codigo} ; ${r.senha}`);
-    if(v){const p=v.split(';').map(s=>s.trim());if(p.length>=3){r.nome=p[0];r.codigo=clean(p[1]);r.senha=clean(p[2]);save()}else toast('Use: Nome ; Código ; Senha')}
+    if(v){const p=v.split(';').map(s=>s.trim());if(p.length>=3){r.nome=p[0];r.codigo=clean(p[1]);r.senha=p.slice(2).join(';').trim();save()}else toast('Use: Nome ; Código ; Senha')}
     render();return;
   }
   render();
@@ -269,7 +271,7 @@ $('imp').onchange=async e=>{
   try{
     const j=JSON.parse(await f.text());
     if(!Array.isArray(j))throw 0;
-    const ok=j.filter(r=>r&&r.nome!=null).map(r=>({id:uid(),nome:String(r.nome),codigo:clean(r.codigo),senha:clean(r.senha)}));
+    const ok=j.filter(r=>r&&r.nome!=null).map(r=>({id:uid(),nome:String(r.nome),codigo:clean(r.codigo),senha:String(r.senha==null?'':r.senha)}));
     if(!ok.length)throw 0;
     if(confirm(`Backup com ${ok.length} cliente(s).\nOK = SUBSTITUIR a lista atual\nCancelar = ADICIONAR no final`))data=ok;else data=data.concat(ok);
     save();render();toast('Backup restaurado');
