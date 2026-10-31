@@ -10,122 +10,289 @@
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--line:#334155;--tx:#f1f5f9;--mut:#94a3b8;--acc:#22c55e;--btn:#334155}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px system-ui,sans-serif;padding:12px;padding-bottom:80px}
-h1{font-size:20px;margin:4px 0 12px}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px system-ui,sans-serif}
+main{max-width:960px;margin:0 auto;padding:12px 12px 90px}
+h1{font-size:18px;margin:2px 0 8px}
 textarea,input,select{width:100%;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
 textarea{min-height:90px;resize:vertical}
-.row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
-button{background:var(--btn);color:var(--tx);border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600}
+button{background:var(--btn);color:var(--tx);border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
 button.p{background:var(--acc);color:#052e16}
 button.on{outline:2px solid var(--acc)}
+.row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
 .grow{flex:1}
 small{color:var(--mut)}
+/* painel rápido fixo no topo */
+#panel{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 10px;border-bottom:1px solid var(--line)}
+#who{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+#nm{font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.big button{min-height:84px;background:var(--card);border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.big button small{font-size:12px;letter-spacing:.08em}
+.big button b{font:700 clamp(18px,5vw,28px) ui-monospace,monospace;word-break:break-all}
+.big button.ok{background:var(--acc);border-color:var(--acc);color:#052e16}
+.big button.ok small{color:#052e16}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.nav button{padding:12px}
+.auto{display:flex;align-items:center;gap:8px;margin-top:8px;color:var(--mut);font-size:14px}
+.auto input{width:auto}
+#kb{display:none;margin-top:6px}
+@media (hover:hover) and (pointer:fine){#kb{display:block}.big button:hover{border-color:var(--acc)}}
+details{background:var(--card);border-radius:10px;padding:10px;margin:10px 0}
+summary{font-weight:700;cursor:pointer}
 .wrap{overflow-x:auto;margin-top:8px}
 table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden}
 th,td{padding:12px 8px;text-align:left;border-bottom:1px solid var(--line)}
 th{font-size:13px;color:var(--mut);text-transform:uppercase}
+tr{scroll-margin-top:230px}
+tr.cur td{background:#14532d55}
+tr.cur td.n{box-shadow:inset 4px 0 0 var(--acc)}
 td.n{color:var(--mut);width:34px}
+td.nome{cursor:pointer}
 td.c{font-family:ui-monospace,monospace;font-weight:700;cursor:pointer}
-td.c:active,td.ok{background:var(--acc);color:#052e16}
-td.x{width:40px;text-align:center;color:var(--mut)}
-#t{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#052e16;padding:10px 18px;border-radius:20px;font-weight:700;opacity:0;transition:.2s;pointer-events:none}
+td.c:hover{background:#334155}
+td.b{width:40px;text-align:center;color:var(--mut);cursor:pointer}
+#t{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#052e16;padding:10px 18px;border-radius:20px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;display:flex;gap:12px;align-items:center;z-index:9;white-space:nowrap}
 #t.s{opacity:1}
+#t.a{pointer-events:auto}
+#t button{background:#052e16;color:#fff;padding:6px 12px}
 .empty{text-align:center;color:var(--mut);padding:30px}
+input[type=file]{display:none}
 </style>
 </head>
 <body>
+<main>
 <h1>📦 Clientes</h1>
 
-<textarea id="in" placeholder="Cole aqui, um cliente por linha:&#10;Maria Souza  12345  abc123&#10;João;98765;xyz789"></textarea>
-<div class="row">
-  <select id="ord" class="grow">
-    <option value="cs">Ordem colada: Nome · Código · Senha</option>
-    <option value="sc">Ordem colada: Nome · Senha · Código</option>
-  </select>
-  <button class="p" id="add">Adicionar</button>
+<div id="panel">
+  <div id="who"><span id="nm">—</span><small id="pos"></small></div>
+  <div class="big">
+    <button id="bc"><small>CÓDIGO</small><b id="vc">—</b></button>
+    <button id="bs"><small>SENHA</small><b id="vs">—</b></button>
+  </div>
+  <div class="nav">
+    <button id="prev">◀ Anterior</button>
+    <button id="next" class="p">Próximo ▶</button>
+  </div>
+  <label class="auto"><input type="checkbox" id="auto"> Ir para o próximo ao copiar a senha</label>
+  <small id="kb">Teclado: <b>C</b> código · <b>S</b> senha · <b>↓</b> próximo · <b>↑</b> anterior · <b>/</b> buscar</small>
 </div>
 
 <div class="row">
-  <input id="q" class="grow" placeholder="🔍 Buscar nome ou código">
+  <input id="q" class="grow" placeholder="🔍 Buscar nome ou código  ( / )">
 </div>
 <div class="row">
   <button id="bo" class="on">1º → último</button>
   <button id="ba">A → Z</button>
   <button id="bu">Último → 1º</button>
-  <button id="clr">Limpar tudo</button>
 </div>
-<small id="cnt"></small>
 
+<details id="addbox">
+  <summary>➕ Adicionar clientes</summary>
+  <textarea id="in" placeholder="Um cliente por linha:&#10;Maria Souza  12345  abc123&#10;João;98765;xyz789"></textarea>
+  <div class="row">
+    <select id="ord" class="grow">
+      <option value="cs">Ordem colada: Nome · Código · Senha</option>
+      <option value="sc">Ordem colada: Nome · Senha · Código</option>
+    </select>
+  </div>
+  <div class="row">
+    <button id="paste" class="p grow">📋 Colar e adicionar</button>
+    <button id="add" class="grow">Adicionar do texto</button>
+  </div>
+  <div class="row">
+    <button id="exp" class="grow">💾 Salvar backup</button>
+    <button id="impb" class="grow">📂 Restaurar backup</button>
+    <button id="clr">🗑 Limpar tudo</button>
+  </div>
+  <input type="file" id="imp" accept=".json,application/json">
+</details>
+
+<small id="cnt"></small>
 <div class="wrap"><table>
-  <thead><tr><th>#</th><th>Nome</th><th>Código</th><th>Senha</th><th></th></tr></thead>
+  <thead><tr><th>#</th><th>Nome</th><th>Código</th><th>Senha</th><th></th><th></th></tr></thead>
   <tbody id="tb"></tbody>
 </table></div>
-<div id="t">Copiado!</div>
+</main>
+<div id="t"><span id="tm"></span><button id="ta" style="display:none"></button></div>
 
 <script>
-const K='clientes_v1';
-let data=[],mode='o';
-try{data=JSON.parse(localStorage.getItem(K))||[]}catch(e){data=[]}
-data.forEach(r=>{r.codigo=String(r.codigo).replace(/[^\p{L}\p{N}]/gu,'');r.senha=String(r.senha).replace(/[^\p{L}\p{N}]/gu,'')});
-try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+const K='clientes_v1',KC='clientes_cfg';
 const $=id=>document.getElementById(id);
+const clean=v=>String(v==null?'':v).replace(/[^\p{L}\p{N}]/gu,'');
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let data=[],cfg={auto:false,ord:'cs',mode:'o'},cur=null;
+try{data=JSON.parse(localStorage.getItem(K))||[]}catch(e){}
+try{Object.assign(cfg,JSON.parse(localStorage.getItem(KC))||{})}catch(e){}
+data.forEach(r=>{r.codigo=clean(r.codigo);r.senha=clean(r.senha);if(!r.id)r.id=uid()});
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}};
-const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const saveCfg=()=>{try{localStorage.setItem(KC,JSON.stringify(cfg))}catch(e){}};
+save();
+$('auto').checked=cfg.auto;$('ord').value=cfg.ord;
 
+/* aviso */
+let th;
+function toast(m,label,fn){
+  $('tm').textContent=m;
+  const b=$('ta');
+  if(label){b.style.display='';b.textContent=label;b.onclick=()=>{fn();$('t').classList.remove('s','a')}}
+  else b.style.display='none';
+  $('t').classList.add('s');$('t').classList.toggle('a',!!label);
+  clearTimeout(th);th=setTimeout(()=>$('t').classList.remove('s','a'),label?6000:1200);
+}
+
+/* ler linhas coladas */
 function parse(line){
   let p;
-  if(/\t|;|\|/.test(line)) p=line.split(/\t|;|\|/);
-  else if((line.match(/,/g)||[]).length>=2) p=line.split(',');
-  else if(/\s-\s/.test(line)) p=line.split(/\s-\s/);
-  else if(/\s{2,}/.test(line)) p=line.trim().split(/\s{2,}/);
+  if(/\t|;|\|/.test(line))p=line.split(/\t|;|\|/);
+  else if((line.match(/,/g)||[]).length>=2)p=line.split(',');
+  else if(/\s-\s/.test(line))p=line.split(/\s-\s/);
+  else if(/\s{2,}/.test(line))p=line.trim().split(/\s{2,}/);
   else p=line.trim().split(/\s+/);
   p=p.map(s=>s.trim()).filter(Boolean);
-  if(p.length<3) return null;
-  const lim=v=>v.replace(/[^\p{L}\p{N}]/gu,'');
-  const b=lim(p.pop()),a=lim(p.pop()),nome=p.join(' ');
-  return $('ord').value==='cs'?{nome,codigo:a,senha:b}:{nome,codigo:b,senha:a};
+  if(p.length<3)return null;
+  const b=clean(p.pop()),a=clean(p.pop()),nome=p.join(' ');
+  if(!a||!b)return null;
+  return $('ord').value==='cs'?{id:uid(),nome,codigo:a,senha:b}:{id:uid(),nome,codigo:b,senha:a};
 }
-$('add').onclick=()=>{
+function addText(txt){
   let n=0,bad=0;
-  $('in').value.split('\n').forEach(l=>{
+  txt.split('\n').forEach(l=>{
     if(!l.trim())return;
     if(/nome/i.test(l)&&/senha/i.test(l))return;
     const r=parse(l);
     if(r){data.push(r);n++}else bad++;
   });
-  if(n){save();$('in').value=''}
+  if(n){save();$('in').value='';$('addbox').open=false}
   render();
   toast(n?`${n} adicionado(s)`+(bad?` · ${bad} ignorado(s)`:''):'Nada reconhecido');
+}
+$('add').onclick=()=>addText($('in').value);
+$('paste').onclick=async()=>{
+  try{const t=await navigator.clipboard.readText();if(t&&t.trim()){addText(t);return}}catch(e){}
+  $('in').focus();toast('Cole na caixa e toque em Adicionar');
 };
+$('ord').onchange=()=>{cfg.ord=$('ord').value;saveCfg()};
+$('auto').onchange=()=>{cfg.auto=$('auto').checked;saveCfg()};
+
+/* lista */
 function view(){
-  let l=data.map((r,i)=>({...r,i}));
+  let l=data.map((r,i)=>({...r,n:i+1}));
   const q=$('q').value.trim().toLowerCase();
   if(q)l=l.filter(r=>r.nome.toLowerCase().includes(q)||r.codigo.toLowerCase().includes(q));
-  if(mode==='a')l.sort((x,y)=>x.nome.localeCompare(y.nome,'pt-BR',{sensitivity:'base'}));
-  if(mode==='u')l.reverse();
+  if(cfg.mode==='a')l.sort((x,y)=>x.nome.localeCompare(y.nome,'pt-BR',{sensitivity:'base'}));
+  if(cfg.mode==='u')l.reverse();
   return l;
 }
-function render(){
+function render(scroll){
   const l=view();
-  $('tb').innerHTML=l.length?l.map(r=>`<tr><td class="n">${r.i+1}</td><td>${esc(r.nome)}</td><td class="c" data-v="${esc(r.codigo)}">${esc(r.codigo)}</td><td class="c" data-v="${esc(r.senha)}">${esc(r.senha)}</td><td class="x" data-d="${r.i}">✕</td></tr>`).join(''):'<tr><td colspan="5" class="empty">Nenhum cliente ainda</td></tr>';
-  $('cnt').textContent=data.length+' cliente(s) · toque no código ou senha para copiar';
-  [['bo','o'],['ba','a'],['bu','u']].forEach(([id,m])=>$(id).classList.toggle('on',mode===m));
+  if(!l.some(r=>r.id===cur))cur=l.length?l[0].id:null;
+  $('tb').innerHTML=l.length?l.map(r=>`<tr data-id="${r.id}" class="${r.id===cur?'cur':''}"><td class="n">${r.n}</td><td class="nome">${esc(r.nome)}</td><td class="c" data-f="codigo">${esc(r.codigo)}</td><td class="c" data-f="senha">${esc(r.senha)}</td><td class="b" data-a="e" title="Editar">✎</td><td class="b" data-a="d" title="Apagar">✕</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhum cliente ainda. Abra “Adicionar clientes”.</td></tr>';
+  const i=l.findIndex(r=>r.id===cur),r=l[i];
+  $('nm').textContent=r?r.nome:'—';
+  $('vc').textContent=r?r.codigo:'—';
+  $('vs').textContent=r?r.senha:'—';
+  $('pos').textContent=r?`${i+1} de ${l.length}`:'';
+  $('cnt').textContent=data.length+' cliente(s)';
+  [['bo','o'],['ba','a'],['bu','u']].forEach(([id,m])=>$(id).classList.toggle('on',cfg.mode===m));
+  if(scroll){const el=document.querySelector('tr.cur');el&&el.scrollIntoView({block:'nearest'})}
 }
-function toast(m){const t=$('t');t.textContent=m;t.classList.add('s');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('s'),1200)}
+
+/* copiar */
 async function copy(v){
   try{await navigator.clipboard.writeText(v)}
   catch(e){const a=document.createElement('textarea');a.value=v;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}
 }
-$('tb').onclick=async e=>{
-  const c=e.target.closest('td.c'),x=e.target.closest('td.x');
-  if(c){await copy(c.dataset.v);c.classList.add('ok');setTimeout(()=>c.classList.remove('ok'),400);toast('Copiado: '+c.dataset.v)}
-  if(x&&confirm('Apagar este cliente?')){data.splice(+x.dataset.d,1);save();render()}
+function move(d){
+  const l=view();if(!l.length)return false;
+  const i=l.findIndex(r=>r.id===cur),j=i+d;
+  if(j<0||j>=l.length){toast(j<0?'Início da lista':'Fim da lista');return false}
+  cur=l[j].id;render(true);return true;
+}
+async function copyField(f){
+  const r=data.find(x=>x.id===cur);if(!r)return;
+  await copy(r[f]);
+  const b=$(f==='codigo'?'bc':'bs');b.classList.add('ok');setTimeout(()=>b.classList.remove('ok'),450);
+  toast((f==='codigo'?'Código':'Senha')+' copiado');
+  if(f==='senha'&&cfg.auto)setTimeout(()=>move(1),350);
+}
+$('bc').onclick=()=>copyField('codigo');
+$('bs').onclick=()=>copyField('senha');
+$('next').onclick=()=>move(1);
+$('prev').onclick=()=>move(-1);
+
+/* clique na tabela */
+$('tb').onclick=e=>{
+  const tr=e.target.closest('tr[data-id]');if(!tr)return;
+  const id=tr.dataset.id,c=e.target.closest('td.c'),b=e.target.closest('td.b');
+  cur=id;
+  if(b&&b.dataset.a==='d'){
+    const i=data.findIndex(x=>x.id===id),r=data[i];
+    data.splice(i,1);save();render();
+    toast('Cliente apagado','Desfazer',()=>{data.splice(i,0,r);save();render()});
+    return;
+  }
+  if(b&&b.dataset.a==='e'){
+    const r=data.find(x=>x.id===id);
+    const v=prompt('Nome ; Código ; Senha',`${r.nome} ; ${r.codigo} ; ${r.senha}`);
+    if(v){const p=v.split(';').map(s=>s.trim());if(p.length>=3){r.nome=p[0];r.codigo=clean(p[1]);r.senha=clean(p[2]);save()}else toast('Use: Nome ; Código ; Senha')}
+    render();return;
+  }
+  render();
+  if(c)copyField(c.dataset.f);
 };
-$('bo').onclick=()=>{mode='o';render()};
-$('ba').onclick=()=>{mode='a';render()};
-$('bu').onclick=()=>{mode='u';render()};
-$('q').oninput=render;
-$('clr').onclick=()=>{if(data.length&&confirm('Apagar TODOS os clientes?')){data=[];save();render()}};
+
+/* ordem */
+$('bo').onclick=()=>{cfg.mode='o';saveCfg();render(true)};
+$('ba').onclick=()=>{cfg.mode='a';saveCfg();render(true)};
+$('bu').onclick=()=>{cfg.mode='u';saveCfg();render(true)};
+$('q').oninput=()=>render();
+
+/* limpar e backup */
+$('clr').onclick=()=>{
+  if(!data.length||!confirm('Apagar TODOS os clientes?'))return;
+  const old=data;data=[];save();render();
+  toast('Lista apagada','Desfazer',()=>{data=old;save();render()});
+};
+$('exp').onclick=()=>{
+  const b=new Blob([JSON.stringify(data)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='clientes-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+  toast('Backup salvo');
+};
+$('impb').onclick=()=>$('imp').click();
+$('imp').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{
+    const j=JSON.parse(await f.text());
+    if(!Array.isArray(j))throw 0;
+    const ok=j.filter(r=>r&&r.nome!=null).map(r=>({id:uid(),nome:String(r.nome),codigo:clean(r.codigo),senha:clean(r.senha)}));
+    if(!ok.length)throw 0;
+    if(confirm(`Backup com ${ok.length} cliente(s).\nOK = SUBSTITUIR a lista atual\nCancelar = ADICIONAR no final`))data=ok;else data=data.concat(ok);
+    save();render();toast('Backup restaurado');
+  }catch(err){toast('Arquivo inválido')}
+};
+
+/* teclado (computador) */
+document.addEventListener('keydown',e=>{
+  const t=e.target.tagName;
+  if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'){
+    if(e.key==='Escape')e.target.blur();
+    if(e.target.id==='q'&&(e.key==='Enter'||e.key==='ArrowDown')){e.preventDefault();e.target.blur()}
+    return;
+  }
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  const k=e.key.toLowerCase();
+  if(k==='c')copyField('codigo');
+  else if(k==='s')copyField('senha');
+  else if(k==='arrowdown'||k==='arrowright'||k==='n'||k==='j'){e.preventDefault();move(1)}
+  else if(k==='arrowup'||k==='arrowleft'||k==='p'||k==='k'){e.preventDefault();move(-1)}
+  else if(k==='/'){e.preventDefault();$('q').focus()}
+});
+
 render();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
