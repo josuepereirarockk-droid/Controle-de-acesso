@@ -73,7 +73,7 @@ input[type=file]{display:none}
 </head>
 <body>
 <main>
-<h1>📦 Clientes <small>v9</small></h1>
+<h1>📦 Clientes <small>v10</small></h1>
 
 <div id="panel">
   <div id="who"><span id="nm">—</span><small id="pos"></small></div>
@@ -113,14 +113,16 @@ input[type=file]{display:none}
     <button id="paste" class="p">📋 Colar e adicionar</button>
     <button id="add">➕ Adicionar do texto</button>
     <button id="plb">📊 Adicionar planilha</button>
+    <button id="pdfb">📄 Adicionar PDF</button>
   </div>
-  <small>Planilha (.xlsx ou .csv): colunas Nome, Código e Senha, com ou sem título na 1ª linha.</small>
+  <small>Planilha (.xlsx ou .csv) ou PDF com texto: colunas Nome, Código e Senha, com ou sem título.</small>
   <div class="row">
     <button id="exp">💾 Salvar backup</button>
     <button id="impb">📂 Restaurar backup</button>
     <button id="clr">🗑 Limpar tudo</button>
   </div>
   <input type="file" id="imp" accept=".json,application/json">
+  <input type="file" id="pdf" accept=".pdf,application/pdf">
   <input type="file" id="plan" accept=".xlsx,.csv,.tsv,.txt,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 </details>
 
@@ -262,11 +264,11 @@ function csvRows(text){
 function addRows(rows){
   rows=rows.filter(r=>r.some(c=>String(c).trim()));
   let ix=$('ord').value==='cs'?[0,1,2]:[0,2,1],start=0;
-  if(rows.length){
-    const h=rows[0].map(c=>String(c).trim());
+  for(let k=0;k<Math.min(5,rows.length);k++){
+    const h=rows[k].map(c=>String(c).trim());
     const fi=re=>h.findIndex(c=>re.test(c));
     const hn=fi(/nome|cliente/i),hc=fi(/c[oó]digo|code|^id$/i),hs=fi(/senha|password/i);
-    if(hs>=0&&(hn>=0||hc>=0)){start=1;ix=[hn>=0?hn:ix[0],hc>=0?hc:ix[1],hs]}
+    if(hs>=0&&(hn>=0||hc>=0)){start=k+1;ix=[hn>=0?hn:ix[0],hc>=0?hc:ix[1],hs];break}
   }
   let n=0,bad=0;
   for(const r of rows.slice(start)){
@@ -276,7 +278,7 @@ function addRows(rows){
   }
   if(n){save();$('addbox').open=false}
   render();
-  toast(n?`${n} da planilha adicionado(s)`+(bad?` · ${bad} ignorado(s)`:''):'Nada reconhecido na planilha');
+  toast(n?`${n} adicionado(s) do arquivo`+(bad?` · ${bad} ignorado(s)`:''):'Nada reconhecido no arquivo');
 }
 $('plb').onclick=()=>$('plan').click();
 $('plan').onchange=async e=>{
@@ -293,6 +295,52 @@ $('plan').onchange=async e=>{
     }
     addRows(rows);
   }catch(err){toast('Não consegui ler. Use .xlsx ou .csv')}
+};
+
+/* pdf */
+let pdfjs=null;
+async function pdfRows(buf){
+  if(!pdfjs){
+    pdfjs=await import('./pdf.min.mjs');
+    pdfjs.GlobalWorkerOptions.workerSrc=new URL('./pdf.worker.min.mjs',location.href).href;
+  }
+  const doc=await pdfjs.getDocument({data:new Uint8Array(buf)}).promise;
+  const rows=[];let any=false;
+  for(let pn=1;pn<=doc.numPages;pn++){
+    const tc=await (await doc.getPage(pn)).getTextContent();
+    const its=tc.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str,x:i.transform[4],y:i.transform[5],w:i.width||0,h:i.height||10}));
+    if(its.length)any=true;
+    its.sort((a,b)=>b.y-a.y||a.x-b.x);
+    const lines=[];
+    for(const it of its){
+      const L=lines[lines.length-1];
+      if(L&&Math.abs(L.y-it.y)<=3)L.it.push(it);else lines.push({y:it.y,it:[it]});
+    }
+    for(const L of lines){
+      L.it.sort((a,b)=>a.x-b.x);
+      const cells=[];let end=null;
+      for(const it of L.it){
+        const gap=end==null?999:it.x-end;
+        if(!cells.length||gap>Math.max(6,it.h*0.6))cells.push(it.s.trim());
+        else cells[cells.length-1]+=(gap>1?' ':'')+it.s.trim();
+        end=it.x+it.w;
+      }
+      if(cells.length>=3)rows.push(cells);
+      else{
+        const t=cells.join(' ').split(/\s+/).filter(Boolean);
+        if(t.length>=3)rows.push([t.slice(0,-2).join(' '),t[t.length-2],t[t.length-1]]);
+      }
+    }
+  }
+  if(!any)throw new Error('semtexto');
+  return rows;
+}
+$('pdfb').onclick=()=>$('pdf').click();
+$('pdf').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  toast('Lendo PDF…');
+  try{addRows(await pdfRows(await f.arrayBuffer()))}
+  catch(err){toast(err&&err.message==='semtexto'?'PDF sem texto (escaneado). Não dá para ler.':'Não consegui ler o PDF')}
 };
 
 /* lista */
