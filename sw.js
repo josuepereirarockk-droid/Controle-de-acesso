@@ -1,4 +1,4 @@
-const C = 'clientes-v10', L = 'clientes-libs';
+const C = 'clientes-v11', L = 'clientes-libs';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 const LIBS = ['./pdf.min.mjs', './pdf.worker.min.mjs'];
 const isLib = u => /\/pdf(\.worker)?\.min\.mjs$/.test(new URL(u).pathname);

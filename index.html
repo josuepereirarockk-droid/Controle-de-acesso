@@ -1,135 +1,241 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0f172a">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E4E7EB">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <title>Clientes</title>
+<script>(function(){try{var c=JSON.parse(localStorage.getItem('clientes_cfg'))||{};document.documentElement.dataset.theme=c.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}})()</script>
 <style>
-:root{--bg:#0f172a;--card:#1e293b;--line:#334155;--tx:#f1f5f9;--mut:#94a3b8;--acc:#22c55e;--btn:#334155;--blue:#2563eb}
+:root{
+  --floor:#E4E7EB;--paper:#FFFFFF;--paper2:#F2F4F6;--ink:#15181E;--mut:#566070;--line:#C5CBD3;--edge:#15181E;
+  --sig:#F0531C;--onsig:#15181E;--tape:#FFD400;--danger:#B42318;--dangerbg:#FDECEA;
+  --shadow:0 1px 0 rgba(21,24,30,.08),0 12px 18px -14px rgba(21,24,30,.4);
+  --display:Bahnschrift,"DIN Alternate","Avenir Next Condensed","Roboto Condensed","Arial Narrow",sans-serif-condensed,system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Roboto Mono",Menlo,monospace;
+  --ph:250px;color-scheme:light;
+}
+:root[data-theme=dark]{
+  --floor:#12151A;--paper:#1C2027;--paper2:#252A33;--ink:#F2F3F5;--mut:#A3ACB9;--line:#363D49;--edge:#5C6676;
+  --sig:#FF6B2C;--danger:#FF9A90;--dangerbg:#3A2023;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 14px 20px -16px rgba(0,0,0,.9);color-scheme:dark;
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--tx);font:17px system-ui,sans-serif}
-main{max-width:1000px;margin:0 auto;padding:12px 14px 110px}
-h1{font-size:20px;margin:2px 0 8px}
-textarea,input,select{width:100%;background:var(--card);color:var(--tx);border:2px solid var(--line);border-radius:14px;padding:14px;font:inherit}
-textarea{min-height:110px;resize:vertical}
-button{background:var(--btn);color:var(--tx);border:0;border-radius:14px;padding:14px 16px;min-height:54px;font:inherit;font-weight:700;cursor:pointer}
-button:active{transform:scale(.97)}
-button.p{background:var(--acc);color:#052e16}
-button.on{outline:3px solid var(--acc)}
-.row{display:flex;gap:12px;margin:12px 0;flex-wrap:wrap}
-.row>button{flex:1 1 150px}
-.grow{flex:1}
-small{color:var(--mut)}
-
-/* painel rápido fixo */
-#panel{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 12px;border-bottom:2px solid var(--line)}
-#who{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
-#nm{font-size:24px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.big{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.big button{min-height:92px;background:var(--card);border:3px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px}
-.big button small{font-size:14px;font-weight:800;letter-spacing:.06em}
-.big button b{font:800 clamp(20px,6vw,30px) ui-monospace,monospace;word-break:break-all}
-.big button.ok{background:var(--acc);border-color:var(--acc);color:#052e16}
-.big button.ok small{color:#052e16}
-.nav{display:grid;grid-template-columns:1fr 1.3fr;gap:12px;margin-top:12px}
-.nav button{min-height:66px;font-size:20px;border-radius:16px}
-#prev{background:var(--blue);color:#fff}
-#next{background:var(--acc);color:#052e16;box-shadow:0 4px 0 #15803d}
-.auto{display:flex;align-items:center;gap:10px;margin-top:12px;color:var(--mut);font-size:15px}
-.auto input{width:24px;height:24px;padding:0}
-#kb{display:none;margin-top:8px}
-@media (hover:hover) and (pointer:fine){#kb{display:block}.big button:hover{border-color:var(--acc)}.fld:hover{border-color:var(--acc)}}
-
-details{background:var(--card);border-radius:16px;padding:14px;margin:16px 0}
-summary{font-weight:800;font-size:18px;cursor:pointer;padding:6px 0}
-
-/* cartões */
-#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:12px}
-.card{background:var(--card);border:3px solid var(--line);border-radius:18px;padding:16px;scroll-margin-top:310px}
-.card.cur{border-color:var(--acc);background:#14532d33}
-.ch{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.num{background:var(--btn);color:var(--mut);border-radius:10px;padding:4px 10px;font-weight:800;font-size:14px}
-.cur .num{background:var(--acc);color:#052e16}
-.cn{font-size:22px;font-weight:800;line-height:1.2;word-break:break-word}
-.fl{display:grid;gap:12px}
-.fld{background:var(--bg);border:3px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;min-height:76px}
-.fld small{display:block;font-size:13px;font-weight:800;letter-spacing:.06em;margin-bottom:4px}
-.fld b{display:block;font:800 24px ui-monospace,monospace;word-break:break-all}
-.fld.ok{background:var(--acc);border-color:var(--acc);color:#052e16}
-.fld.ok small{color:#052e16}
-.ca{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.ca button{min-height:52px;background:var(--btn)}
-.ca button[data-a=d]{background:#7f1d1d;color:#fecaca}
-#t{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#052e16;padding:14px 22px;border-radius:24px;font-weight:800;opacity:0;transition:.2s;pointer-events:none;display:flex;gap:14px;align-items:center;z-index:9;white-space:nowrap}
-#t.s{opacity:1}
-#t.a{pointer-events:auto}
-#t button{background:#052e16;color:#fff;padding:8px 16px;min-height:44px}
-.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:40px 10px}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--floor);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.app{max-width:1180px;margin:0 auto;padding:14px 14px 120px}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+:focus-visible{outline:3px solid var(--sig);outline-offset:2px}
 input[type=file]{display:none}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 16px;border-radius:10px;border:2px solid var(--edge);background:var(--paper);font-weight:700;transition:transform .08s}
+.btn:active{transform:translateY(1px) scale(.985)}
+.btn.pri{background:var(--sig);border-color:var(--onsig);color:var(--onsig)}
+.btn.danger{color:var(--danger);background:var(--dangerbg);border-color:var(--danger)}
+
+/* topo */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+h1{font:700 32px/1 var(--display);letter-spacing:-.01em;margin:0;display:flex;align-items:baseline;gap:8px}
+.ver{font:600 12px var(--mono);color:var(--mut)}
+.top-r{display:flex;align-items:center;gap:10px}
+.chip{display:inline-flex;align-items:baseline;gap:6px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;color:var(--mut)}
+.chip b{font:700 19px var(--display);color:var(--ink)}
+#theme{width:46px;height:46px;border-radius:50%;border:2px solid var(--edge);background:var(--paper);display:grid;place-items:center}
+#theme .sun{display:none}
+:root[data-theme=dark] #theme .sun{display:block}
+:root[data-theme=dark] #theme .moon{display:none}
+#intro{margin:8px 0 14px;color:var(--mut);font-size:15px;max-width:62ch}
+
+/* disposição: celular = 1 coluna; computador = painel à esquerda, lista à direita */
+.pwrap{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--floor);margin:0 -14px;padding:6px 14px 10px}
+@media (max-height:520px){.pwrap{position:static}}
+@media (min-width:960px){
+  .app{padding:30px 28px 120px}
+  .layout{display:grid;grid-template-columns:410px minmax(0,1fr);gap:30px;align-items:start}
+  .pwrap{top:20px;margin:0;padding:0;background:none}
+  #panel{padding:16px}
+  #nm{font-size:30px}
+  .cp{min-height:104px}
+}
+
+/* painel do cliente selecionado */
+#panel{background:var(--paper);border:2px solid var(--edge);border-radius:14px;padding:12px;box-shadow:var(--shadow)}
+.phead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+#nm{font:700 26px/1.15 var(--display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+#pos{font:600 13px var(--mono);color:var(--mut);white-space:nowrap}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cp{min-height:84px;border:2px solid var(--edge);border-radius:10px;background:var(--paper2);padding:8px 10px 10px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;gap:4px;min-width:0;transition:background .12s}
+.cp .k{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--mut)}
+.cp b{font:700 clamp(19px,5.6vw,26px)/1.15 var(--mono);word-break:break-all;display:block}
+.cp .hint{display:none;font-size:12px;color:var(--mut)}
+.cp.ok,.fld.ok{background:var(--tape);border-color:var(--onsig);color:#15181E}
+.cp.ok .k,.fld.ok .k,.cp.ok .hint,.fld.ok .cpi{color:#15181E}
+.nav{display:grid;grid-template-columns:1fr 1.25fr;gap:10px;margin-top:10px}
+.nav .btn{min-height:54px;font-size:17px}
+.autor{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:14px;color:var(--mut);cursor:pointer;min-height:32px}
+input.sw{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:99px;background:var(--line);position:relative;flex:none;margin:0;cursor:pointer;transition:background .15s}
+input.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--paper);box-shadow:0 1px 2px rgba(0,0,0,.35);transition:transform .15s}
+input.sw:checked{background:var(--sig)}
+input.sw:checked::after{transform:translateX(18px)}
+#kb{display:none;margin-top:8px;font-size:13px;color:var(--mut)}
+#kb b{font-family:var(--mono);color:var(--ink)}
+@media (hover:hover) and (pointer:fine){.cp:hover,.fld:hover{border-color:var(--sig)}}
+@media (hover:hover) and (pointer:fine) and (min-width:700px){#kb{display:block}.cp .hint{display:block}}
+
+/* busca, ordem e lista */
+.search{position:relative}
+.search .i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut)}
+#q{width:100%;min-height:54px;padding:0 14px 0 44px;border:2px solid var(--edge);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit}
+#q::placeholder{color:var(--mut)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--edge);border-radius:12px;overflow:hidden;margin:10px 0;background:var(--paper)}
+.seg button{min-height:48px;padding:6px 8px;font-size:14px;font-weight:600;line-height:1.15}
+.seg button+button{border-left:2px solid var(--edge)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+
+details.addbox{background:var(--paper);border:2px solid var(--edge);border-radius:12px;margin:10px 0}
+details.addbox>summary{list-style:none;display:flex;align-items:center;gap:10px;min-height:54px;padding:0 14px;font-weight:700;cursor:pointer}
+details.addbox>summary::-webkit-details-marker{display:none}
+details.addbox>summary .chev{margin-left:auto;transition:transform .15s}
+details[open].addbox>summary .chev{transform:rotate(90deg)}
+.abody{padding:2px 14px 14px;display:grid;gap:12px}
+.abody textarea,.abody select{width:100%;border:2px solid var(--line);border-radius:10px;background:var(--paper2);color:var(--ink);font:inherit;padding:12px}
+.abody textarea{min-height:110px;resize:vertical;font-family:var(--mono);font-size:15px}
+.abody select{min-height:50px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.sub{font-size:13px;color:var(--mut);margin:0}
+.grp{border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:10px}
+
+.lh{margin:14px 2px 8px;font-size:14px;color:var(--mut)}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:16px}
+.card{position:relative;background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);scroll-margin-top:calc(var(--ph) + 14px)}
+@media (min-width:960px){.card{scroll-margin-top:24px}}
+.card.cur{border-color:var(--sig)}
+.card.cur::before{content:"";position:absolute;top:-10px;right:20px;width:58px;height:20px;background:var(--tape);opacity:.92;transform:rotate(4deg);border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.28)}
+.ch{display:flex;align-items:center;gap:10px;min-width:0}
+.num{flex:none;min-width:34px;height:26px;padding:0 8px;border-radius:6px;background:var(--ink);color:var(--paper);font:700 13px/26px var(--mono);text-align:center}
+.cur .num{background:var(--sig);color:var(--onsig)}
+.cn{margin:0;font:700 21px/1.15 var(--display);min-width:0;word-break:break-word}
+.tear{border-top:2px dashed var(--line);margin:11px 0 11px}
+.fl{display:grid;gap:8px}
+.fld{display:grid;grid-template-columns:76px minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;min-height:54px;padding:8px 12px;border:2px solid var(--line);border-radius:8px;background:var(--paper2);text-align:left;transition:background .12s}
+.fld .k{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--mut)}
+.fld b{font:700 19px/1.2 var(--mono);word-break:break-all;min-width:0}
+.fld .cpi{color:var(--mut);display:grid}
+.ca{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ca .btn{min-height:44px;font-size:14px;border-width:1px;border-color:var(--line)}
+.ca .btn.danger{border-color:var(--danger)}
+.empty{grid-column:1/-1;text-align:center;padding:36px 16px;border:2px dashed var(--line);border-radius:14px;color:var(--mut);display:grid;gap:12px;justify-items:center}
+.empty p{margin:0}
+
+#t{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:12px;font-weight:600;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;display:flex;align-items:center;gap:14px;z-index:20;max-width:calc(100vw - 28px);box-shadow:0 12px 30px -10px rgba(0,0,0,.55)}
+#t.s{opacity:1;transform:translateX(-50%)}
+#t.a{pointer-events:auto}
+#t button{background:var(--sig);color:var(--onsig);min-height:40px;padding:0 14px;border-radius:8px;font-weight:700}
+
+@media (max-width:380px){h1{font-size:28px}.chip{padding:5px 10px}.nav .btn{font-size:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<main>
-<h1>📦 Clientes <small>v10</small></h1>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></symbol>
+<symbol id="i-hash" viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14 9l2 2"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-clip" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/></symbol>
+<symbol id="i-text" viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></symbol>
+<symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></symbol>
+<symbol id="i-pdf" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></symbol>
+<symbol id="i-save" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></symbol>
+</defs></svg>
 
-<div id="panel">
-  <div id="who"><span id="nm">—</span><small id="pos"></small></div>
-  <div class="big">
-    <button id="bc"><small>🔢 CÓDIGO</small><b id="vc">—</b></button>
-    <button id="bs"><small>🔑 SENHA</small><b id="vs">—</b></button>
+<div class="app">
+  <header class="top">
+    <h1>Clientes <span class="ver">v11</span></h1>
+    <div class="top-r">
+      <span class="chip"><b id="totalTop">0</b> cadastros</span>
+      <button id="theme" type="button" aria-label="Alternar tema claro e escuro">
+        <svg class="i moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        <svg class="i sun" aria-hidden="true"><use href="#i-sun"/></svg>
+      </button>
+    </div>
+  </header>
+  <p id="intro">Encontre um cadastro e copie o código ou a senha com um toque. Os dados ficam salvos só neste aparelho.</p>
+
+  <div class="layout">
+    <div class="pwrap">
+      <section id="panel" aria-label="Cliente selecionado">
+        <div class="phead"><span id="nm">—</span><span id="pos"></span></div>
+        <div class="big">
+          <button id="bc" class="cp" type="button"><span class="k"><svg class="i" aria-hidden="true"><use href="#i-hash"/></svg>Código</span><b id="vc">—</b><span class="hint">Tocar para copiar</span></button>
+          <button id="bs" class="cp" type="button"><span class="k"><svg class="i" aria-hidden="true"><use href="#i-key"/></svg>Senha</span><b id="vs">—</b><span class="hint">Tocar para copiar</span></button>
+        </div>
+        <div class="nav">
+          <button id="prev" class="btn" type="button"><svg class="i" aria-hidden="true"><use href="#i-left"/></svg>Anterior</button>
+          <button id="next" class="btn pri" type="button">Próximo<svg class="i" aria-hidden="true"><use href="#i-right"/></svg></button>
+        </div>
+        <label class="autor"><input type="checkbox" id="auto" class="sw"> Ir para o próximo ao copiar a senha</label>
+        <div id="kb">Atalhos: <b>C</b> código · <b>S</b> senha · <b>↓</b> próximo · <b>↑</b> anterior · <b>/</b> buscar</div>
+      </section>
+    </div>
+
+    <main class="listcol">
+      <div class="search">
+        <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="q" placeholder="Digite o nome ou código do cliente" aria-label="Buscar cliente por nome ou código" autocomplete="off">
+      </div>
+      <div class="seg" role="group" aria-label="Ordem da lista">
+        <button id="bo" type="button" class="on">Ordem de cadastro</button>
+        <button id="ba" type="button">Nome A–Z</button>
+        <button id="bu" type="button">Mais recentes</button>
+      </div>
+
+      <details id="addbox" class="addbox">
+        <summary><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>Cadastrar ou importar clientes<svg class="i chev" aria-hidden="true"><use href="#i-right"/></svg></summary>
+        <div class="abody">
+          <textarea id="in" placeholder="Cole os cadastros aqui. Um cliente por linha:&#10;Maria Souza  12345  abc.123&#10;João;98765;xyz@789" aria-label="Cadastros para adicionar"></textarea>
+          <select id="ord" aria-label="Ordem dos dados colados">
+            <option value="cs">Ordem colada: Nome · Código · Senha</option>
+            <option value="sc">Ordem colada: Nome · Senha · Código</option>
+          </select>
+          <div class="grid2">
+            <button id="paste" type="button" class="btn pri"><svg class="i" aria-hidden="true"><use href="#i-clip"/></svg>Colar da área de transferência</button>
+            <button id="add" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-text"/></svg>Adicionar cadastros</button>
+            <button id="plb" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-table"/></svg>Importar planilha</button>
+            <button id="pdfb" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-pdf"/></svg>Importar PDF</button>
+          </div>
+          <p class="sub">Planilha (.xlsx ou .csv) ou PDF com texto: colunas Nome, Código e Senha, com ou sem título.</p>
+          <div class="grp">
+            <div class="grid2">
+              <button id="exp" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-save"/></svg>Salvar backup</button>
+              <button id="impb" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-folder"/></svg>Restaurar backup</button>
+            </div>
+            <button id="clr" type="button" class="btn danger"><svg class="i" aria-hidden="true"><use href="#i-trash"/></svg>Apagar todos os cadastros</button>
+          </div>
+          <input type="file" id="imp" accept=".json,application/json">
+          <input type="file" id="pdf" accept=".pdf,application/pdf">
+          <input type="file" id="plan" accept=".xlsx,.csv,.tsv,.txt,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        </div>
+      </details>
+
+      <div class="lh" id="cnt"></div>
+      <div id="list"></div>
+    </main>
   </div>
-  <div class="nav">
-    <button id="prev">◀ Anterior</button>
-    <button id="next">Próximo ▶</button>
-  </div>
-  <label class="auto"><input type="checkbox" id="auto"> Ir para o próximo ao copiar a senha</label>
-  <small id="kb">Teclado: <b>C</b> código · <b>S</b> senha · <b>↓</b> próximo · <b>↑</b> anterior · <b>/</b> buscar</small>
 </div>
-
-<div class="row">
-  <input id="q" class="grow" placeholder="🔍 Buscar nome ou código  ( / )">
-</div>
-<div class="row">
-  <button id="bo" class="on">⬇️ 1º → último</button>
-  <button id="ba">🔤 A → Z</button>
-  <button id="bu">⬆️ Último → 1º</button>
-</div>
-
-<details id="addbox">
-  <summary>➕ Adicionar clientes</summary>
-  <div class="row">
-    <textarea id="in" placeholder="Um cliente por linha:&#10;Maria Souza  12345  abc.123&#10;João;98765;xyz@789"></textarea>
-  </div>
-  <div class="row">
-    <select id="ord" class="grow">
-      <option value="cs">Ordem colada: Nome · Código · Senha</option>
-      <option value="sc">Ordem colada: Nome · Senha · Código</option>
-    </select>
-  </div>
-  <div class="row">
-    <button id="paste" class="p">📋 Colar e adicionar</button>
-    <button id="add">➕ Adicionar do texto</button>
-    <button id="plb">📊 Adicionar planilha</button>
-    <button id="pdfb">📄 Adicionar PDF</button>
-  </div>
-  <small>Planilha (.xlsx ou .csv) ou PDF com texto: colunas Nome, Código e Senha, com ou sem título.</small>
-  <div class="row">
-    <button id="exp">💾 Salvar backup</button>
-    <button id="impb">📂 Restaurar backup</button>
-    <button id="clr">🗑 Limpar tudo</button>
-  </div>
-  <input type="file" id="imp" accept=".json,application/json">
-  <input type="file" id="pdf" accept=".pdf,application/pdf">
-  <input type="file" id="plan" accept=".xlsx,.csv,.tsv,.txt,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-</details>
-
-<small id="cnt"></small>
-<div id="list"></div>
-</main>
-<div id="t"><span id="tm"></span><button id="ta" style="display:none"></button></div>
+<div id="t" role="status" aria-live="polite"><span id="tm"></span><button id="ta" type="button" style="display:none"></button></div>
 
 <script>
 const K='clientes_v1',KC='clientes_cfg';
@@ -146,6 +252,19 @@ const save=()=>{try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}};
 const saveCfg=()=>{try{localStorage.setItem(KC,JSON.stringify(cfg))}catch(e){}};
 save();
 $('auto').checked=cfg.auto;$('ord').value=cfg.ord;
+
+/* tema claro/escuro */
+function applyTheme(t){
+  document.documentElement.dataset.theme=t;
+  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#12151A':'#E4E7EB';
+}
+const sysDark=matchMedia('(prefers-color-scheme: dark)');
+applyTheme(cfg.theme||(sysDark.matches?'dark':'light'));
+if(sysDark.addEventListener)sysDark.addEventListener('change',e=>{if(!cfg.theme)applyTheme(e.matches?'dark':'light')});
+$('theme').onclick=()=>{cfg.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';saveCfg();applyTheme(cfg.theme)};
+/* altura do painel fixo, para os cartões não ficarem escondidos atrás dele */
+const pw=document.querySelector('.pwrap');
+if(window.ResizeObserver)new ResizeObserver(()=>document.documentElement.style.setProperty('--ph',pw.offsetHeight+'px')).observe(pw);
 
 /* aviso */
 let th;
@@ -355,21 +474,25 @@ function view(){
 function render(scroll){
   const l=view();
   if(!l.some(r=>r.id===cur))cur=l.length?l[0].id:null;
-  $('list').innerHTML=l.length?l.map(r=>`<div class="card${r.id===cur?' cur':''}" data-id="${r.id}">
-<div class="ch"><span class="num">${r.n}</span><span class="cn">${esc(r.nome)}</span></div>
+  const ic=n=>`<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+  const q=$('q').value.trim();
+  $('list').innerHTML=l.length?l.map(r=>{const c=r.id===cur;return `<article class="card${c?' cur':''}" data-id="${r.id}"${c?' aria-current="true"':''}>
+<div class="ch"><span class="num">${r.n}</span><h3 class="cn">${esc(r.nome)}</h3></div>
+<div class="tear"></div>
 <div class="fl">
-<div class="fld" data-f="codigo"><small>🔢 CÓDIGO</small><b>${esc(r.codigo)}</b></div>
-<div class="fld" data-f="senha"><small>🔑 SENHA</small><b>${esc(r.senha)}</b></div>
+<button type="button" class="fld" data-f="codigo"><span class="k">${ic('hash')}Código</span><b>${esc(r.codigo)}</b><span class="cpi">${ic('copy')}</span></button>
+<button type="button" class="fld" data-f="senha"><span class="k">${ic('key')}Senha</span><b>${esc(r.senha)}</b><span class="cpi">${ic('copy')}</span></button>
 </div>
-<div class="ca"><button data-a="e">✏️ Editar</button><button data-a="d">🗑 Apagar</button></div>
-</div>`).join(''):'<div class="empty">Nenhum cliente ainda.<br>Abra “➕ Adicionar clientes”.</div>';
+<div class="ca"><button type="button" class="btn" data-a="e">${ic('edit')}Editar</button><button type="button" class="btn danger" data-a="d">${ic('trash')}Apagar</button></div>
+</article>`}).join(''):(data.length?`<div class="empty"><p>Nenhum cadastro encontrado para “${esc(q)}”.</p></div>`:`<div class="empty">${ic('plus')}<p>Nenhum cadastro ainda.<br>Cole uma lista, importe uma planilha ou um PDF.</p><button type="button" class="btn pri" data-a="open">Cadastrar ou importar clientes</button></div>`);
   const i=l.findIndex(r=>r.id===cur),r=l[i];
-  $('nm').textContent=r?r.nome:'—';
+  $('nm').textContent=r?r.nome:'Nenhum cliente selecionado';
   $('vc').textContent=r?r.codigo:'—';
   $('vs').textContent=r?r.senha:'—';
   $('pos').textContent=r?`${i+1} de ${l.length}`:'';
-  $('cnt').textContent=data.length+' cliente(s)';
-  [['bo','o'],['ba','a'],['bu','u']].forEach(([id,m])=>$(id).classList.toggle('on',cfg.mode===m));
+  $('totalTop').textContent=data.length;
+  $('cnt').textContent=q?`${l.length} de ${data.length} cadastros`:`${data.length} cadastro(s)`;
+  [['bo','o'],['ba','a'],['bu','u']].forEach(([id,m])=>{$(id).classList.toggle('on',cfg.mode===m);$(id).setAttribute('aria-pressed',cfg.mode===m)});
   if(scroll){const el=document.querySelector('.card.cur');el&&el.scrollIntoView({block:'nearest'})}
 }
 
@@ -390,7 +513,7 @@ async function copyField(f){
   const b=$(f==='codigo'?'bc':'bs');b.classList.add('ok');setTimeout(()=>b.classList.remove('ok'),450);
   const fe=document.querySelector(`.card.cur .fld[data-f="${f}"]`);
   if(fe){fe.classList.add('ok');setTimeout(()=>fe.classList.remove('ok'),450)}
-  toast((f==='codigo'?'Código':'Senha')+' copiado');
+  toast(f==='codigo'?'Código copiado':'Senha copiada');
   if(f==='senha'&&cfg.auto)setTimeout(()=>move(1),350);
 }
 $('bc').onclick=()=>copyField('codigo');
@@ -400,6 +523,7 @@ $('prev').onclick=()=>move(-1);
 
 /* toque nos cartões */
 $('list').onclick=e=>{
+  if(e.target.closest('[data-a=open]')){$('addbox').open=true;$('addbox').scrollIntoView({block:'start',behavior:'smooth'});return}
   const card=e.target.closest('.card');if(!card)return;
   const id=card.dataset.id,f=e.target.closest('.fld'),b=e.target.closest('button[data-a]');
   cur=id;
