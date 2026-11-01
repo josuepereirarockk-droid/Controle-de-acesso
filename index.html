@@ -8,70 +8,82 @@
 <link rel="icon" href="icon-192.png">
 <title>Clientes</title>
 <style>
-:root{--bg:#0f172a;--card:#1e293b;--line:#334155;--tx:#f1f5f9;--mut:#94a3b8;--acc:#22c55e;--btn:#334155}
+:root{--bg:#0f172a;--card:#1e293b;--line:#334155;--tx:#f1f5f9;--mut:#94a3b8;--acc:#22c55e;--btn:#334155;--blue:#2563eb}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px system-ui,sans-serif}
-main{max-width:960px;margin:0 auto;padding:12px 12px 90px}
-h1{font-size:18px;margin:2px 0 8px}
-textarea,input,select{width:100%;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
-textarea{min-height:90px;resize:vertical}
-button{background:var(--btn);color:var(--tx);border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
+body{margin:0;background:var(--bg);color:var(--tx);font:17px system-ui,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:12px 14px 110px}
+h1{font-size:20px;margin:2px 0 8px}
+textarea,input,select{width:100%;background:var(--card);color:var(--tx);border:2px solid var(--line);border-radius:14px;padding:14px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+button{background:var(--btn);color:var(--tx);border:0;border-radius:14px;padding:14px 16px;min-height:54px;font:inherit;font-weight:700;cursor:pointer}
+button:active{transform:scale(.97)}
 button.p{background:var(--acc);color:#052e16}
-button.on{outline:2px solid var(--acc)}
-.row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
+button.on{outline:3px solid var(--acc)}
+.row{display:flex;gap:12px;margin:12px 0;flex-wrap:wrap}
+.row>button{flex:1 1 150px}
 .grow{flex:1}
 small{color:var(--mut)}
-/* painel rápido fixo no topo */
-#panel{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 10px;border-bottom:1px solid var(--line)}
-#who{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
-#nm{font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.big{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.big button{min-height:84px;background:var(--card);border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.big button small{font-size:12px;letter-spacing:.08em}
-.big button b{font:700 clamp(18px,5vw,28px) ui-monospace,monospace;word-break:break-all}
+
+/* painel rápido fixo */
+#panel{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 12px;border-bottom:2px solid var(--line)}
+#who{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+#nm{font-size:24px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.big button{min-height:92px;background:var(--card);border:3px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px}
+.big button small{font-size:14px;font-weight:800;letter-spacing:.06em}
+.big button b{font:800 clamp(20px,6vw,30px) ui-monospace,monospace;word-break:break-all}
 .big button.ok{background:var(--acc);border-color:var(--acc);color:#052e16}
 .big button.ok small{color:#052e16}
-.nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.nav button{padding:12px}
-.auto{display:flex;align-items:center;gap:8px;margin-top:8px;color:var(--mut);font-size:14px}
-.auto input{width:auto}
-#kb{display:none;margin-top:6px}
-@media (hover:hover) and (pointer:fine){#kb{display:block}.big button:hover{border-color:var(--acc)}}
-details{background:var(--card);border-radius:10px;padding:10px;margin:10px 0}
-summary{font-weight:700;cursor:pointer}
-.wrap{overflow-x:auto;margin-top:8px}
-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden}
-th,td{padding:12px 8px;text-align:left;border-bottom:1px solid var(--line)}
-th{font-size:13px;color:var(--mut);text-transform:uppercase}
-tr{scroll-margin-top:230px}
-tr.cur td{background:#14532d55}
-tr.cur td.n{box-shadow:inset 4px 0 0 var(--acc)}
-td.n{color:var(--mut);width:34px}
-td.nome{cursor:pointer}
-td.c{font-family:ui-monospace,monospace;font-weight:700;cursor:pointer}
-td.c:hover{background:#334155}
-td.b{width:40px;text-align:center;color:var(--mut);cursor:pointer}
-#t{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#052e16;padding:10px 18px;border-radius:20px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;display:flex;gap:12px;align-items:center;z-index:9;white-space:nowrap}
+.nav{display:grid;grid-template-columns:1fr 1.3fr;gap:12px;margin-top:12px}
+.nav button{min-height:66px;font-size:20px;border-radius:16px}
+#prev{background:var(--blue);color:#fff}
+#next{background:var(--acc);color:#052e16;box-shadow:0 4px 0 #15803d}
+.auto{display:flex;align-items:center;gap:10px;margin-top:12px;color:var(--mut);font-size:15px}
+.auto input{width:24px;height:24px;padding:0}
+#kb{display:none;margin-top:8px}
+@media (hover:hover) and (pointer:fine){#kb{display:block}.big button:hover{border-color:var(--acc)}.fld:hover{border-color:var(--acc)}}
+
+details{background:var(--card);border-radius:16px;padding:14px;margin:16px 0}
+summary{font-weight:800;font-size:18px;cursor:pointer;padding:6px 0}
+
+/* cartões */
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:12px}
+.card{background:var(--card);border:3px solid var(--line);border-radius:18px;padding:16px;scroll-margin-top:310px}
+.card.cur{border-color:var(--acc);background:#14532d33}
+.ch{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.num{background:var(--btn);color:var(--mut);border-radius:10px;padding:4px 10px;font-weight:800;font-size:14px}
+.cur .num{background:var(--acc);color:#052e16}
+.cn{font-size:22px;font-weight:800;line-height:1.2;word-break:break-word}
+.fl{display:grid;gap:12px}
+.fld{background:var(--bg);border:3px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;min-height:76px}
+.fld small{display:block;font-size:13px;font-weight:800;letter-spacing:.06em;margin-bottom:4px}
+.fld b{display:block;font:800 24px ui-monospace,monospace;word-break:break-all}
+.fld.ok{background:var(--acc);border-color:var(--acc);color:#052e16}
+.fld.ok small{color:#052e16}
+.ca{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.ca button{min-height:52px;background:var(--btn)}
+.ca button[data-a=d]{background:#7f1d1d;color:#fecaca}
+#t{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#052e16;padding:14px 22px;border-radius:24px;font-weight:800;opacity:0;transition:.2s;pointer-events:none;display:flex;gap:14px;align-items:center;z-index:9;white-space:nowrap}
 #t.s{opacity:1}
 #t.a{pointer-events:auto}
-#t button{background:#052e16;color:#fff;padding:6px 12px}
-.empty{text-align:center;color:var(--mut);padding:30px}
+#t button{background:#052e16;color:#fff;padding:8px 16px;min-height:44px}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:40px 10px}
 input[type=file]{display:none}
 </style>
 </head>
 <body>
 <main>
-<h1>📦 Clientes <small>v7</small></h1>
+<h1>📦 Clientes <small>v9</small></h1>
 
 <div id="panel">
   <div id="who"><span id="nm">—</span><small id="pos"></small></div>
   <div class="big">
-    <button id="bc"><small>CÓDIGO</small><b id="vc">—</b></button>
-    <button id="bs"><small>SENHA</small><b id="vs">—</b></button>
+    <button id="bc"><small>🔢 CÓDIGO</small><b id="vc">—</b></button>
+    <button id="bs"><small>🔑 SENHA</small><b id="vs">—</b></button>
   </div>
   <div class="nav">
     <button id="prev">◀ Anterior</button>
-    <button id="next" class="p">Próximo ▶</button>
+    <button id="next">Próximo ▶</button>
   </div>
   <label class="auto"><input type="checkbox" id="auto"> Ir para o próximo ao copiar a senha</label>
   <small id="kb">Teclado: <b>C</b> código · <b>S</b> senha · <b>↓</b> próximo · <b>↑</b> anterior · <b>/</b> buscar</small>
@@ -81,14 +93,16 @@ input[type=file]{display:none}
   <input id="q" class="grow" placeholder="🔍 Buscar nome ou código  ( / )">
 </div>
 <div class="row">
-  <button id="bo" class="on">1º → último</button>
-  <button id="ba">A → Z</button>
-  <button id="bu">Último → 1º</button>
+  <button id="bo" class="on">⬇️ 1º → último</button>
+  <button id="ba">🔤 A → Z</button>
+  <button id="bu">⬆️ Último → 1º</button>
 </div>
 
 <details id="addbox">
   <summary>➕ Adicionar clientes</summary>
-  <textarea id="in" placeholder="Um cliente por linha:&#10;Maria Souza  12345  abc123&#10;João;98765;xyz789"></textarea>
+  <div class="row">
+    <textarea id="in" placeholder="Um cliente por linha:&#10;Maria Souza  12345  abc.123&#10;João;98765;xyz@789"></textarea>
+  </div>
   <div class="row">
     <select id="ord" class="grow">
       <option value="cs">Ordem colada: Nome · Código · Senha</option>
@@ -96,22 +110,22 @@ input[type=file]{display:none}
     </select>
   </div>
   <div class="row">
-    <button id="paste" class="p grow">📋 Colar e adicionar</button>
-    <button id="add" class="grow">Adicionar do texto</button>
+    <button id="paste" class="p">📋 Colar e adicionar</button>
+    <button id="add">➕ Adicionar do texto</button>
+    <button id="plb">📊 Adicionar planilha</button>
   </div>
+  <small>Planilha (.xlsx ou .csv): colunas Nome, Código e Senha, com ou sem título na 1ª linha.</small>
   <div class="row">
-    <button id="exp" class="grow">💾 Salvar backup</button>
-    <button id="impb" class="grow">📂 Restaurar backup</button>
+    <button id="exp">💾 Salvar backup</button>
+    <button id="impb">📂 Restaurar backup</button>
     <button id="clr">🗑 Limpar tudo</button>
   </div>
   <input type="file" id="imp" accept=".json,application/json">
+  <input type="file" id="plan" accept=".xlsx,.csv,.tsv,.txt,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 </details>
 
 <small id="cnt"></small>
-<div class="wrap"><table>
-  <thead><tr><th>#</th><th>Nome</th><th>Código</th><th>Senha</th><th></th><th></th></tr></thead>
-  <tbody id="tb"></tbody>
-</table></div>
+<div id="list"></div>
 </main>
 <div id="t"><span id="tm"></span><button id="ta" style="display:none"></button></div>
 
@@ -178,6 +192,109 @@ $('paste').onclick=async()=>{
 $('ord').onchange=()=>{cfg.ord=$('ord').value;saveCfg()};
 $('auto').onchange=()=>{cfg.auto=$('auto').checked;saveCfg()};
 
+/* planilha */
+async function inflate(u8){
+  const ds=new DecompressionStream('deflate-raw');
+  const w=ds.writable.getWriter();w.write(u8);w.close();
+  return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+}
+async function unzip(buf){
+  const v=new DataView(buf),u8=new Uint8Array(buf);
+  let e=-1;
+  for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-66000);i--){if(v.getUint32(i,true)===0x06054b50){e=i;break}}
+  if(e<0)throw new Error('zip');
+  const n=v.getUint16(e+10,true);let p=v.getUint32(e+16,true);
+  const dec=new TextDecoder(),out={};
+  for(let k=0;k<n;k++){
+    if(v.getUint32(p,true)!==0x02014b50)break;
+    const meth=v.getUint16(p+10,true),cs=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),xl=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),off=v.getUint32(p+42,true);
+    const name=dec.decode(u8.subarray(p+46,p+46+nl));
+    p+=46+nl+xl+cl;
+    if(!/^xl\/(sharedStrings\.xml|worksheets\/sheet\d+\.xml)$/.test(name))continue;
+    const ln=v.getUint16(off+26,true),lx=v.getUint16(off+28,true),st=off+30+ln+lx;
+    const raw=u8.subarray(st,st+cs);
+    out[name]=dec.decode(meth===0?raw:await inflate(raw));
+  }
+  return out;
+}
+async function xlsxRows(buf){
+  const z=await unzip(buf);
+  const sh=Object.keys(z).filter(n=>/worksheets\//.test(n)).sort((a,b)=>parseInt(a.match(/\d+/)[0])-parseInt(b.match(/\d+/)[0]));
+  if(!sh.length)throw new Error('sheet');
+  const P=new DOMParser(),ss=[];
+  if(z['xl/sharedStrings.xml']){
+    const d=P.parseFromString(z['xl/sharedStrings.xml'],'application/xml');
+    for(const si of d.getElementsByTagName('si'))ss.push(Array.from(si.getElementsByTagName('t')).map(t=>t.textContent).join(''));
+  }
+  const d=P.parseFromString(z[sh[0]],'application/xml'),rows=[];
+  for(const row of d.getElementsByTagName('row')){
+    const arr=[];
+    for(const c of row.getElementsByTagName('c')){
+      const m=(c.getAttribute('r')||'').match(/^[A-Z]+/);
+      let col=arr.length;
+      if(m){col=0;for(const ch of m[0])col=col*26+ch.charCodeAt(0)-64;col--}
+      const t=c.getAttribute('t');let val='';
+      if(t==='inlineStr')val=Array.from(c.getElementsByTagName('t')).map(x=>x.textContent).join('');
+      else{const vv=c.getElementsByTagName('v')[0];val=vv?vv.textContent:'';if(t==='s')val=ss[+val]||''}
+      arr[col]=val;
+    }
+    rows.push(Array.from(arr,x=>x==null?'':String(x)));
+  }
+  return rows;
+}
+function csvRows(text){
+  text=text.replace(/^\uFEFF/,'');
+  const first=text.split('\n')[0]||'';
+  const cnt=d=>first.split(d).length;
+  const delim=[';','\t',','].sort((a,b)=>cnt(b)-cnt(a))[0];
+  const rows=[];let row=[],f='',q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){if(ch==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=ch}
+    else if(ch==='"')q=true;
+    else if(ch===delim){row.push(f);f=''}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(f);rows.push(row);row=[];f=''}
+    else f+=ch;
+  }
+  if(f!==''||row.length){row.push(f);rows.push(row)}
+  return rows;
+}
+function addRows(rows){
+  rows=rows.filter(r=>r.some(c=>String(c).trim()));
+  let ix=$('ord').value==='cs'?[0,1,2]:[0,2,1],start=0;
+  if(rows.length){
+    const h=rows[0].map(c=>String(c).trim());
+    const fi=re=>h.findIndex(c=>re.test(c));
+    const hn=fi(/nome|cliente/i),hc=fi(/c[oó]digo|code|^id$/i),hs=fi(/senha|password/i);
+    if(hs>=0&&(hn>=0||hc>=0)){start=1;ix=[hn>=0?hn:ix[0],hc>=0?hc:ix[1],hs]}
+  }
+  let n=0,bad=0;
+  for(const r of rows.slice(start)){
+    const nome=String(r[ix[0]]==null?'':r[ix[0]]).trim(),codigo=clean(r[ix[1]]),senha=String(r[ix[2]]==null?'':r[ix[2]]).trim();
+    if(!nome||!codigo||!senha){bad++;continue}
+    data.push({id:uid(),nome,codigo,senha});n++;
+  }
+  if(n){save();$('addbox').open=false}
+  render();
+  toast(n?`${n} da planilha adicionado(s)`+(bad?` · ${bad} ignorado(s)`:''):'Nada reconhecido na planilha');
+}
+$('plb').onclick=()=>$('plan').click();
+$('plan').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{
+    const buf=await f.arrayBuffer(),u=new Uint8Array(buf,0,Math.min(4,buf.byteLength));
+    let rows;
+    if(u[0]===0xD0&&u[1]===0xCF){toast('Salve como .xlsx ou .csv');return}
+    if(u[0]===0x50&&u[1]===0x4B)rows=await xlsxRows(buf);
+    else{
+      let t=new TextDecoder('utf-8').decode(buf);
+      if(t.includes('\uFFFD'))t=new TextDecoder('windows-1252').decode(buf);
+      rows=csvRows(t);
+    }
+    addRows(rows);
+  }catch(err){toast('Não consegui ler. Use .xlsx ou .csv')}
+};
+
 /* lista */
 function view(){
   let l=data.map((r,i)=>({...r,n:i+1}));
@@ -190,7 +307,14 @@ function view(){
 function render(scroll){
   const l=view();
   if(!l.some(r=>r.id===cur))cur=l.length?l[0].id:null;
-  $('tb').innerHTML=l.length?l.map(r=>`<tr data-id="${r.id}" class="${r.id===cur?'cur':''}"><td class="n">${r.n}</td><td class="nome">${esc(r.nome)}</td><td class="c" data-f="codigo">${esc(r.codigo)}</td><td class="c" data-f="senha">${esc(r.senha)}</td><td class="b" data-a="e" title="Editar">✎</td><td class="b" data-a="d" title="Apagar">✕</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhum cliente ainda. Abra “Adicionar clientes”.</td></tr>';
+  $('list').innerHTML=l.length?l.map(r=>`<div class="card${r.id===cur?' cur':''}" data-id="${r.id}">
+<div class="ch"><span class="num">${r.n}</span><span class="cn">${esc(r.nome)}</span></div>
+<div class="fl">
+<div class="fld" data-f="codigo"><small>🔢 CÓDIGO</small><b>${esc(r.codigo)}</b></div>
+<div class="fld" data-f="senha"><small>🔑 SENHA</small><b>${esc(r.senha)}</b></div>
+</div>
+<div class="ca"><button data-a="e">✏️ Editar</button><button data-a="d">🗑 Apagar</button></div>
+</div>`).join(''):'<div class="empty">Nenhum cliente ainda.<br>Abra “➕ Adicionar clientes”.</div>';
   const i=l.findIndex(r=>r.id===cur),r=l[i];
   $('nm').textContent=r?r.nome:'—';
   $('vc').textContent=r?r.codigo:'—';
@@ -198,7 +322,7 @@ function render(scroll){
   $('pos').textContent=r?`${i+1} de ${l.length}`:'';
   $('cnt').textContent=data.length+' cliente(s)';
   [['bo','o'],['ba','a'],['bu','u']].forEach(([id,m])=>$(id).classList.toggle('on',cfg.mode===m));
-  if(scroll){const el=document.querySelector('tr.cur');el&&el.scrollIntoView({block:'nearest'})}
+  if(scroll){const el=document.querySelector('.card.cur');el&&el.scrollIntoView({block:'nearest'})}
 }
 
 /* copiar */
@@ -216,6 +340,8 @@ async function copyField(f){
   const r=data.find(x=>x.id===cur);if(!r)return;
   await copy(r[f]);
   const b=$(f==='codigo'?'bc':'bs');b.classList.add('ok');setTimeout(()=>b.classList.remove('ok'),450);
+  const fe=document.querySelector(`.card.cur .fld[data-f="${f}"]`);
+  if(fe){fe.classList.add('ok');setTimeout(()=>fe.classList.remove('ok'),450)}
   toast((f==='codigo'?'Código':'Senha')+' copiado');
   if(f==='senha'&&cfg.auto)setTimeout(()=>move(1),350);
 }
@@ -224,10 +350,10 @@ $('bs').onclick=()=>copyField('senha');
 $('next').onclick=()=>move(1);
 $('prev').onclick=()=>move(-1);
 
-/* clique na tabela */
-$('tb').onclick=e=>{
-  const tr=e.target.closest('tr[data-id]');if(!tr)return;
-  const id=tr.dataset.id,c=e.target.closest('td.c'),b=e.target.closest('td.b');
+/* toque nos cartões */
+$('list').onclick=e=>{
+  const card=e.target.closest('.card');if(!card)return;
+  const id=card.dataset.id,f=e.target.closest('.fld'),b=e.target.closest('button[data-a]');
   cur=id;
   if(b&&b.dataset.a==='d'){
     const i=data.findIndex(x=>x.id===id),r=data[i];
@@ -242,7 +368,7 @@ $('tb').onclick=e=>{
     render();return;
   }
   render();
-  if(c)copyField(c.dataset.f);
+  if(f)copyField(f.dataset.f);
 };
 
 /* ordem */
