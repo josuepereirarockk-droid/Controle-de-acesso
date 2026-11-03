@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <title>Clientes</title>
-<script>(function(){try{var c=JSON.parse(localStorage.getItem('clientes_cfg'))||{};document.documentElement.dataset.theme=c.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var Z=[1,1.15,1.3,1.5,1.7],z=typeof c.z==='number'?c.z:(innerWidth<700?1:0);document.documentElement.style.setProperty('--z',Z[z]);document.documentElement.dataset.z=z}catch(e){}})()</script>
+<script>(function(){try{var c=JSON.parse(localStorage.getItem('clientes_cfg'))||{};document.documentElement.dataset.theme=c.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var Z=[1,1.15,1.3,1.5,1.7],z=typeof c.z==='number'?c.z:(innerWidth<700?1:0);document.documentElement.style.setProperty('--z',Z[z]);document.documentElement.dataset.z=z;if(c.pin&&c.pin.h)document.documentElement.classList.add('locked')}catch(e){}})()</script>
 <style>
 :root{
   --floor:#E4E7EB;--paper:#FFFFFF;--paper2:#F2F4F6;--ink:#15181E;--mut:#566070;--line:#C5CBD3;--edge:#15181E;
@@ -48,10 +48,6 @@ h1{font:700 2rem/1 var(--display);letter-spacing:-.01em;margin:0;display:flex;al
 .zbtn{min-width:3.125rem;height:3.125rem;padding:0 0.5rem;border-radius:1.5625rem;border:2px solid var(--edge);background:var(--paper);font-weight:800;font-size:1.125rem;display:inline-flex;align-items:center;justify-content:center;gap:1px}
 .zbtn .za{font-size:0.9375rem}.zbtn .zb{font-size:1.375rem}
 .zbtn:disabled{opacity:.35;cursor:default}
-#theme{width:3.125rem;height:3.125rem;border-radius:50%;border:2px solid var(--edge);background:var(--paper);display:grid;place-items:center}
-#theme .sun{display:none}
-:root[data-theme=dark] #theme .sun{display:block}
-:root[data-theme=dark] #theme .moon{display:none}
 #intro{margin:0.5rem 0 0.875rem;color:var(--mut);font-size:1.0625rem;max-width:62ch}
 
 /* disposição: celular = 1 coluna; computador = painel à esquerda, lista à direita */
@@ -177,6 +173,72 @@ details[open].addbox>summary .chev{transform:rotate(90deg)}
 @media (max-width:700px){
   html[data-z="3"] .nav,html[data-z="4"] .nav,html[data-z="3"] .ca,html[data-z="4"] .ca{grid-template-columns:minmax(0,1fr)}
 }
+
+/* ===== v14 ===== */
+.sec .row2{grid-template-columns:repeat(auto-fit,minmax(9rem,1fr))}
+.ncb,.dlg,.abody,.grp,.sec,.fl{grid-template-columns:minmax(0,1fr)}
+.urlin,.frow input,.abody textarea,.abody select{min-width:0}
+@media (max-width:700px){html[data-z="3"] .nch h2,html[data-z="4"] .nch h2{white-space:normal}}
+.dlg{max-height:calc(100vh - 3rem);overflow-y:auto}
+[hidden]{display:none!important}
+.rbtn{width:3.125rem;height:3.125rem;border-radius:50%;border:2px solid var(--edge);background:var(--paper);display:grid;place-items:center;flex:none}
+.phead{align-items:center}
+.eyebtn{width:2.75rem;height:2.75rem;border-radius:50%;border:2px solid var(--line);background:var(--paper2);display:grid;place-items:center;flex:none}
+.phead .pr{display:flex;align-items:center;gap:0.5rem}
+#psite{width:100%;margin-top:0.625rem}
+.banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.5rem 0.75rem;background:var(--tape);color:#15181E;border:2px solid #15181E;border-radius:0.75rem;padding:0.75rem 0.875rem;margin:0 0 0.75rem;font-weight:600;font-size:1.05rem}
+.banner .btn{min-height:2.9rem;font-size:1rem;background:#fff;color:#15181E;border-color:#15181E}
+.banner .btn.pri{background:#15181E;color:#fff}
+.bkb{display:flex;flex-wrap:wrap;gap:0.5rem}
+.rec{display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:0.5rem 0;font-size:1rem;color:var(--mut)}
+.rc{border:2px solid var(--edge);border-radius:999px;background:var(--paper);padding:0.25rem 0.9rem;min-height:2.6rem;font-weight:700;font-size:1rem;color:var(--ink)}
+.tools{display:flex;flex-wrap:wrap;gap:0.5rem;margin:0.5rem 0}
+.favf{border:2px solid var(--edge);border-radius:999px;background:var(--paper);min-height:2.8rem;padding:0 1rem;font-weight:700;font-size:1rem;display:inline-flex;align-items:center;gap:0.4rem}
+.favf[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.star{margin-left:auto;flex:none;width:3rem;height:3rem;border-radius:50%;display:grid;place-items:center;color:var(--mut)}
+.star .i{width:1.6rem;height:1.6rem}
+.star[aria-pressed=true]{color:var(--sig)}
+.star[aria-pressed=true] .i{fill:currentColor}
+.frc{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0.5rem}
+.eye{width:3.5rem;border:2px solid var(--line);border-radius:0.5rem;background:var(--paper2);display:grid;place-items:center}
+.obs{margin:0.6rem 0 0;font-size:1rem;color:var(--mut);word-break:break-word}
+.ca .wide{grid-column:1/-1}
+
+dialog{border:2px solid var(--edge);border-radius:1rem;background:var(--paper);color:var(--ink);padding:0;width:min(34rem,calc(100vw - 1.5rem));max-height:calc(100vh - 1.5rem);box-shadow:0 20px 60px -20px rgba(0,0,0,.6)}
+dialog::backdrop{background:rgba(10,12,16,.65)}
+.dlg{padding:1rem;display:grid;gap:0.75rem}
+.dlg h2{margin:0;font:700 1.5rem/1.1 var(--display)}
+.dlg .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.5rem}
+.dlg ol{margin:0;padding-left:1.4rem;display:grid;gap:0.75rem;font-size:1.1rem}
+.dlg ol b{font-family:var(--display);font-size:1.2rem}
+.emsg{margin:0;min-height:1.4rem;color:var(--danger);font-weight:700}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:3.4rem;font-weight:600;font-size:1.05rem}
+input.sw{appearance:none;-webkit-appearance:none;width:3.25rem;height:2rem;border-radius:99px;background:var(--line);position:relative;flex:none;margin:0;cursor:pointer;transition:background .15s}
+input.sw::after{content:"";position:absolute;top:0.25rem;left:0.25rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--paper);box-shadow:0 1px 2px rgba(0,0,0,.35);transition:transform .15s}
+input.sw:checked{background:var(--sig)}
+input.sw:checked::after{transform:translateX(1.25rem)}
+.sec{border-top:1px dashed var(--line);padding-top:0.75rem;display:grid;gap:0.5rem}
+.sec h3{margin:0;font:700 1.15rem/1.2 var(--display)}
+.urlin{width:100%;min-height:3.2rem;border:2px solid var(--edge);border-radius:0.75rem;background:var(--paper2);color:var(--ink);font:inherit;font-size:1.05rem;padding:0 0.75rem}
+.note{margin:0;font-size:0.95rem;color:var(--mut)}
+
+#lock{display:none;position:fixed;inset:0;z-index:1000;background:var(--floor);align-items:center;justify-content:center;padding:1rem;overflow:auto}
+html.locked #lock{display:flex}
+html.locked .app,html.locked #t{visibility:hidden}
+html.locked body{overflow:hidden}
+.lk{width:min(22rem,100%);text-align:center;display:grid;gap:0.75rem}
+.lk h2{margin:0;font:700 1.8rem/1.1 var(--display)}
+.lk p{margin:0;min-height:1.5rem;color:var(--mut);font-weight:600}
+#dots{display:flex;gap:1rem;justify-content:center;margin:0.25rem 0}
+#dots i{width:1.2rem;height:1.2rem;border-radius:50%;border:2px solid var(--edge)}
+#dots i.on{background:var(--ink)}
+.pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.6rem}
+.pad button{min-height:4.2rem;border:2px solid var(--edge);border-radius:1rem;background:var(--paper);font:700 1.8rem var(--mono);display:grid;place-items:center}
+.pad button:active{background:var(--tape);color:#15181E}
+.pad .blank{visibility:hidden}
+.shake{animation:sh .3s}
+@keyframes sh{20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+
 </style>
 </head>
 <body>
@@ -196,26 +258,32 @@ details[open].addbox>summary .chev{transform:rotate(90deg)}
 <symbol id="i-pdf" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></symbol>
 <symbol id="i-save" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
 <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
-<symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
-<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-4M8.2 13l7.6 4"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M13 9l4 6M17 9l-4 6"/></symbol>
 </defs></svg>
 
 <div class="app">
   <header class="top">
-    <h1>Clientes <span class="ver">v13</span></h1>
+    <h1>Clientes <span class="ver">v14</span></h1>
     <div class="top-r">
-      <span class="chip"><b id="totalTop">0</b> cadastros</span>
       <div class="zoom" role="group" aria-label="Tamanho das letras">
         <button id="zm" type="button" class="zbtn" aria-label="Diminuir as letras"><span class="za">A</span>−</button>
         <button id="zp" type="button" class="zbtn" aria-label="Aumentar as letras"><span class="zb">A</span>+</button>
       </div>
-      <button id="theme" type="button" aria-label="Alternar tema claro e escuro">
-        <svg class="i moon" aria-hidden="true"><use href="#i-moon"/></svg>
-        <svg class="i sun" aria-hidden="true"><use href="#i-sun"/></svg>
-      </button>
+      <button id="lockbtn" type="button" class="rbtn" aria-label="Bloquear o app agora" hidden><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg></button>
+      <button id="setbtn" type="button" class="rbtn" aria-label="Configurações"><svg class="i" aria-hidden="true"><use href="#i-gear"/></svg></button>
     </div>
   </header>
   <p id="intro">Encontre um cadastro e copie o código ou a senha com um toque. Os dados ficam salvos só neste aparelho.</p>
+
+  <div id="upd" class="banner" hidden role="status"><span>Há uma nova versão do app.</span><button id="updb" class="btn pri" type="button">Atualizar agora</button></div>
+  <div id="bk" class="banner" hidden role="status"><span id="bkt"></span><span class="bkb"><button id="bkgo" class="btn pri" type="button">Salvar e enviar backup</button><button id="bklater" class="btn" type="button">Lembrar depois</button></span></div>
 
   <div class="layout">
     <div class="side">
@@ -231,7 +299,7 @@ details[open].addbox>summary .chev{transform:rotate(90deg)}
         </section>
       </div>
       <section id="panel" aria-label="Cliente selecionado">
-        <div class="phead"><span id="nm">—</span><span id="pos"></span></div>
+        <div class="phead"><span id="nm">—</span><span class="pr"><span id="pos"></span><button id="peye" type="button" class="eyebtn" aria-label="Mostrar ou esconder a senha"></button></span></div>
         <div class="big">
           <button id="bc" class="cp" type="button"><span class="k"><svg class="i" aria-hidden="true"><use href="#i-hash"/></svg>Código</span><b id="vc">—</b><span class="hint">Tocar para copiar</span></button>
           <button id="bs" class="cp" type="button"><span class="k"><svg class="i" aria-hidden="true"><use href="#i-key"/></svg>Senha</span><b id="vs">—</b><span class="hint">Tocar para copiar</span></button>
@@ -240,6 +308,7 @@ details[open].addbox>summary .chev{transform:rotate(90deg)}
           <button id="prev" class="btn" type="button"><svg class="i" aria-hidden="true"><use href="#i-left"/></svg>Anterior</button>
           <button id="next" class="btn pri" type="button">Próximo<svg class="i" aria-hidden="true"><use href="#i-right"/></svg></button>
         </div>
+        <button id="psite" class="btn" type="button" hidden><svg class="i" aria-hidden="true"><use href="#i-link"/></svg>Abrir site</button>
         <div id="kb">Atalhos: <b>C</b> código · <b>S</b> senha · <b>↓</b> próximo · <b>↑</b> anterior · <b>/</b> buscar</div>
       </section>
     </div>
@@ -254,9 +323,11 @@ details[open].addbox>summary .chev{transform:rotate(90deg)}
         <button id="ba" type="button">Nome A–Z</button>
         <button id="bu" type="button">Mais recentes</button>
       </div>
+      <div class="tools"><button id="favf" class="favf" type="button" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-star"/></svg>Só favoritos</button></div>
+      <div id="rec" class="rec" hidden><span>Últimos copiados:</span><span id="recl" class="rec"></span></div>
 
       <details id="addbox" class="addbox">
-        <summary><svg class="i" aria-hidden="true"><use href="#i-table"/></svg>Importar vários clientes<svg class="i chev" aria-hidden="true"><use href="#i-right"/></svg></summary>
+        <summary><svg class="i" aria-hidden="true"><use href="#i-table"/></svg>Importar e backup<svg class="i chev" aria-hidden="true"><use href="#i-right"/></svg></summary>
         <div class="abody">
           <p class="sub">Cole uma lista, ou escolha uma planilha (.xlsx, .csv) ou um PDF com texto.</p>
           <textarea id="in" placeholder="Cole os cadastros aqui. Um cliente por linha:&#10;Maria Souza  12345  abc.123&#10;João;98765;xyz@789" aria-label="Cadastros para adicionar"></textarea>
@@ -270,10 +341,11 @@ details[open].addbox>summary .chev{transform:rotate(90deg)}
             <button id="plb" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-table"/></svg>Importar planilha</button>
             <button id="pdfb" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-pdf"/></svg>Importar PDF</button>
           </div>
-          <p class="sub">Planilha (.xlsx ou .csv) ou PDF com texto: colunas Nome, Código e Senha, com ou sem título.</p>
           <div class="grp">
+            <p class="sub" id="lastbk"></p>
             <div class="grid2">
               <button id="exp" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-save"/></svg>Salvar backup</button>
+              <button id="shr" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg>Enviar backup</button>
               <button id="impb" type="button" class="btn"><svg class="i" aria-hidden="true"><use href="#i-folder"/></svg>Restaurar backup</button>
             </div>
             <button id="clr" type="button" class="btn danger"><svg class="i" aria-hidden="true"><use href="#i-trash"/></svg>Apagar todos os cadastros</button>
@@ -291,31 +363,119 @@ details[open].addbox>summary .chev{transform:rotate(90deg)}
 </div>
 <div id="t" role="status" aria-live="polite"><span id="tm"></span><button id="ta" type="button" style="display:none"></button></div>
 
+<dialog id="ed" aria-labelledby="edt">
+  <div class="dlg">
+    <h2 id="edt">Editar cadastro</h2>
+    <label class="frow"><span>Nome</span><input id="en" autocomplete="off" autocapitalize="words" placeholder="Digite o nome"></label>
+    <label class="frow"><span>Código</span><input id="ec" class="mono" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="Digite o código"></label>
+    <label class="frow"><span>Senha</span><input id="es" class="mono" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Digite a senha"></label>
+    <label class="frow"><span>Obs.</span><input id="eo" autocomplete="off" placeholder="Observação (opcional)"></label>
+    <p id="emsg" class="emsg" role="alert"></p>
+    <div class="row2"><button id="ecancel" type="button" class="btn">Cancelar</button><button id="esave" type="button" class="btn pri">Salvar</button></div>
+  </div>
+</dialog>
+
+<dialog id="setd" aria-labelledby="sett">
+  <div class="dlg">
+    <h2 id="sett">Configurações</h2>
+    <label class="setrow"><span>Mostrar as senhas na tela</span><input type="checkbox" class="sw" id="s-show"></label>
+    <label class="setrow"><span>Vibrar ao copiar</span><input type="checkbox" class="sw" id="s-vib"></label>
+    <div class="sec">
+      <h3>Site para entrar nas contas</h3>
+      <input id="s-site" class="urlin" type="url" inputmode="url" placeholder="Ex.: meusite.com.br/login" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <p class="note" id="s-sitehint">Se preencher, aparece o botão “Abrir site” em cada cliente.</p>
+    </div>
+    <div class="sec">
+      <h3>PIN de segurança</h3>
+      <p class="note" id="pinst"></p>
+      <div class="row2">
+        <button id="pin-set" type="button" class="btn pri"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Criar PIN</button>
+        <button id="pin-chg" type="button" class="btn" hidden>Trocar PIN</button>
+        <button id="pin-rm" type="button" class="btn" hidden>Remover PIN</button>
+        <button id="pin-now" type="button" class="btn pri" hidden><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Bloquear agora</button>
+      </div>
+      <p class="note">O PIN impede que outra pessoa abra o app, mas não protege contra quem tem conhecimento técnico para olhar os arquivos do navegador. Guarde também um backup.</p>
+    </div>
+    <div class="sec">
+      <h3>Aparência e ajuda</h3>
+      <div class="row2">
+        <button id="theme" type="button" class="btn"><span id="themet">Tema escuro</span></button>
+        <button id="helpbtn" type="button" class="btn">Como usar</button>
+      </div>
+    </div>
+    <button id="s-close" type="button" class="btn pri">Fechar</button>
+  </div>
+</dialog>
+
+<dialog id="help" aria-labelledby="helpt">
+  <div class="dlg">
+    <h2 id="helpt">Como usar</h2>
+    <ol>
+      <li><b>Cadastre.</b> Preencha Nome, Código e Senha no quadro de cima e toque em Cadastrar.</li>
+      <li><b>Copie.</b> Procure o cliente e toque no Código ou na Senha dele. O valor é copiado: é só colar no site.</li>
+      <li><b>Proteja.</b> Salve um backup de vez em quando e, na engrenagem, crie um PIN.</li>
+    </ol>
+    <button id="helpok" type="button" class="btn pri">Entendi</button>
+  </div>
+</dialog>
+
+<div id="lock" role="dialog" aria-modal="true" aria-label="Bloqueio do app">
+  <div class="lk">
+    <h2 id="lkt">Digite o PIN</h2>
+    <p id="lkm" role="alert"></p>
+    <div id="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="pad">
+      <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button>
+      <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button>
+      <button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button>
+      <button type="button" class="blank" tabindex="-1" aria-hidden="true"></button><button type="button" data-k="0">0</button><button type="button" data-k="b" aria-label="Apagar"><svg class="i" aria-hidden="true"><use href="#i-back"/></svg></button>
+    </div>
+    <button id="lkx" type="button" class="lnk">Esqueci o PIN</button>
+  </div>
+</div>
+
 <script>
 const K='clientes_v1',KC='clientes_cfg';
 const $=id=>document.getElementById(id);
 const clean=v=>String(v==null?'':v).replace(/\D/g,'');
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let data=[],cfg={ord:'cs',mode:'o'},cur=null;
+const ic=n=>`<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+let data=[],cfg={ord:'cs',mode:'o'},cur=null,onlyFav=false;
+const revealed=new Set();
 try{data=JSON.parse(localStorage.getItem(K))||[]}catch(e){}
 try{Object.assign(cfg,JSON.parse(localStorage.getItem(KC))||{})}catch(e){}
-data.forEach(r=>{r.codigo=clean(r.codigo);r.senha=String(r.senha==null?'':r.senha);if(!r.id)r.id=uid()});
+if(!Array.isArray(data))data=[];
+data=data.filter(r=>r&&typeof r==='object');
+data.forEach(r=>{r.nome=String(r.nome==null?'':r.nome);r.codigo=clean(r.codigo);r.senha=String(r.senha==null?'':r.senha);if(!r.id)r.id=uid()});
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}};
 const saveCfg=()=>{try{localStorage.setItem(KC,JSON.stringify(cfg))}catch(e){}};
 save();
 $('ord').value=cfg.ord;
 
+/* aviso */
+let th;
+function toast(m,label,fn){
+  $('tm').textContent=m;
+  const b=$('ta');
+  if(label){b.style.display='';b.textContent=label;b.onclick=()=>{fn();$('t').classList.remove('s','a')}}
+  else b.style.display='none';
+  $('t').classList.add('s');$('t').classList.toggle('a',!!label);
+  clearTimeout(th);th=setTimeout(()=>$('t').classList.remove('s','a'),label?6000:1400);
+}
+
 /* tema claro/escuro */
 function applyTheme(t){
   document.documentElement.dataset.theme=t;
   const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#12151A':'#E4E7EB';
+  $('themet').textContent=t==='dark'?'Tema claro':'Tema escuro';
 }
 const sysDark=matchMedia('(prefers-color-scheme: dark)');
 applyTheme(cfg.theme||(sysDark.matches?'dark':'light'));
 if(sysDark.addEventListener)sysDark.addEventListener('change',e=>{if(!cfg.theme)applyTheme(e.matches?'dark':'light')});
 $('theme').onclick=()=>{cfg.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';saveCfg();applyTheme(cfg.theme)};
+
 /* tamanho das letras */
 const ZS=[1,1.15,1.3,1.5,1.7];
 const zIdx=()=>typeof cfg.z==='number'?cfg.z:(innerWidth<700?1:0);
@@ -327,22 +487,113 @@ function applyZoom(){
 $('zp').onclick=()=>{cfg.z=Math.min(ZS.length-1,zIdx()+1);saveCfg();applyZoom()};
 $('zm').onclick=()=>{cfg.z=Math.max(0,zIdx()-1);saveCfg();applyZoom()};
 applyZoom();
-/* altura do painel fixo, para os cartões não ficarem escondidos atrás dele */
+
+/* altura do quadro fixo, para os cartões não ficarem escondidos atrás dele */
 const pw=document.querySelector('.pin');
 if(window.ResizeObserver)new ResizeObserver(()=>document.documentElement.style.setProperty('--ph',pw.offsetHeight+'px')).observe(pw);
 
-/* aviso */
-let th;
-function toast(m,label,fn){
-  $('tm').textContent=m;
-  const b=$('ta');
-  if(label){b.style.display='';b.textContent=label;b.onclick=()=>{fn();$('t').classList.remove('s','a')}}
-  else b.style.display='none';
-  $('t').classList.add('s');$('t').classList.toggle('a',!!label);
-  clearTimeout(th);th=setTimeout(()=>$('t').classList.remove('s','a'),label?6000:1200);
+/* ---------- PIN de segurança ---------- */
+const root=document.documentElement;
+const hasPin=()=>!!(cfg.pin&&cfg.pin.h);
+const isLocked=()=>root.classList.contains('locked');
+let lockMode=null,lkBuf='',lkTmp='',lkFail=0,lkUntil=0,LOCK_AFTER=60000,hiddenAt=0;
+async function hashPin(pin,salt){
+  const s=salt+':'+pin;
+  if(window.crypto&&crypto.subtle){
+    const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+    return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  }
+  let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return 'f'+h;
 }
+const lkmsg=m=>{$('lkm').textContent=m};
+function dots(){[...$('dots').children].forEach((d,i)=>d.classList.toggle('on',i<lkBuf.length))}
+function showLock(mode,title,msg,keep){
+  document.querySelectorAll('dialog[open]').forEach(d=>d.close());
+  lockMode=mode;lkBuf='';if(!keep)lkTmp='';
+  $('lkt').textContent=title;lkmsg(msg||'');
+  $('lkx').textContent=mode==='unlock'?'Esqueci o PIN':'Cancelar';
+  root.classList.add('locked');dots();
+}
+function hideLock(){root.classList.remove('locked');lockMode=null;lkBuf='';dots()}
+function lockNow(){showLock('unlock','Digite o PIN','Seus cadastros estão protegidos.')}
+function shake(){const d=$('dots');d.classList.remove('shake');void d.offsetWidth;d.classList.add('shake')}
+async function pinDone(){
+  const pin=lkBuf;lkBuf='';dots();
+  if(lockMode==='unlock'||lockMode==='verify-remove'||lockMode==='verify-change'){
+    const ok=hasPin()&&await hashPin(pin,cfg.pin.s)===cfg.pin.h;
+    if(ok){
+      lkFail=0;
+      if(lockMode==='unlock')hideLock();
+      else if(lockMode==='verify-remove'){cfg.pin=null;saveCfg();hideLock();refreshSettings();toast('PIN removido')}
+      else showLock('new1','Novo PIN','Digite 4 números.');
+    }else{
+      shake();lkFail++;
+      if(lkFail>=5){lkFail=0;lkUntil=Date.now()+30000;lkmsg('Muitas tentativas. Espere 30 segundos.')}
+      else lkmsg('PIN errado. Tente de novo.');
+    }
+  }else if(lockMode==='new1'){
+    lkTmp=pin;showLock('new2','Repita o PIN','Digite o mesmo PIN de novo.',true);
+  }else if(lockMode==='new2'){
+    if(pin===lkTmp){
+      const salt=uid()+uid();cfg.pin={s:salt,h:await hashPin(pin,salt)};saveCfg();hideLock();refreshSettings();toast('PIN criado');
+    }else{shake();showLock('new1','Novo PIN','Os números não eram iguais. Comece de novo.')}
+  }
+}
+function padKey(k){
+  if(Date.now()<lkUntil){lkmsg('Espere '+Math.ceil((lkUntil-Date.now())/1000)+' segundos.');return}
+  if(k==='b')lkBuf=lkBuf.slice(0,-1);else if(lkBuf.length<4)lkBuf+=k;
+  dots();
+  if(lkBuf.length===4)setTimeout(pinDone,120);
+}
+document.querySelector('.pad').addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b)padKey(b.dataset.k)});
+$('lkx').onclick=()=>{
+  if(lockMode==='unlock'){
+    if(confirm('Esqueceu o PIN?\n\nPara entrar de novo, o app precisa APAGAR todos os cadastros e remover o PIN. Se você tiver um backup, depois é só restaurar.\n\nApagar tudo?')&&confirm('Última confirmação: apagar TODOS os cadastros deste aparelho?')){
+      data=[];save();cfg.pin=null;cfg.recent=[];saveCfg();revealed.clear();hideLock();refreshSettings();render();toast('Tudo apagado. PIN removido.');
+    }
+  }else hideLock();
+};
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){hiddenAt=Date.now();return}
+  if(hasPin()&&hiddenAt&&Date.now()-hiddenAt>=LOCK_AFTER&&!isLocked())lockNow();
+  hiddenAt=0;
+});
+if(hasPin())showLock('unlock','Digite o PIN','Seus cadastros estão protegidos.');
+$('lockbtn').onclick=lockNow;
 
-/* ler linhas coladas */
+/* ---------- configurações ---------- */
+function siteUrl(){
+  let u=(cfg.site||'').trim();if(!u)return '';
+  if(!/^https?:\/\//i.test(u)){if(/^[a-z][a-z0-9+.-]*:/i.test(u)&&!/^[^/]*\.[^/]*\//.test(u)&&!/^[\w.-]+:\d+/.test(u))return '';u='https://'+u}
+  try{const x=new URL(u);return /^https?:$/.test(x.protocol)&&x.hostname.includes('.')?x.href:''}catch(e){return ''}
+}
+function openSite(){const u=siteUrl();if(u)window.open(u,'_blank','noopener')}
+function refreshSettings(){
+  $('s-show').checked=cfg.showPw===true;$('s-vib').checked=cfg.vib!==false;$('s-site').value=cfg.site||'';
+  const p=hasPin();
+  $('pinst').textContent=p?'PIN ligado. O app pede o PIN ao abrir e depois de 1 minuto fora da tela.':'Sem PIN. Quem abrir o app vê todos os cadastros.';
+  $('pin-set').hidden=p;$('pin-chg').hidden=!p;$('pin-rm').hidden=!p;$('pin-now').hidden=!p;$('lockbtn').hidden=!p;
+  siteHint();
+}
+function siteHint(){
+  const raw=(cfg.site||'').trim(),u=siteUrl();
+  $('s-sitehint').textContent=!raw?'Se preencher, aparece o botão “Abrir site” em cada cliente.':(u?'Vai abrir: '+u:'Endereço inválido. Exemplo: meusite.com.br/login');
+}
+$('setbtn').onclick=()=>{refreshSettings();$('setd').showModal()};
+$('s-close').onclick=()=>$('setd').close();
+$('s-show').onchange=()=>{cfg.showPw=$('s-show').checked;saveCfg();render()};
+$('s-vib').onchange=()=>{cfg.vib=$('s-vib').checked;saveCfg();if(cfg.vib)buzz()};
+$('s-site').oninput=()=>{cfg.site=$('s-site').value.trim();saveCfg();siteHint();render()};
+$('pin-set').onclick=()=>showLock('new1','Crie um PIN','Digite 4 números.');
+$('pin-chg').onclick=()=>showLock('verify-change','PIN atual','Digite o PIN atual.');
+$('pin-rm').onclick=()=>showLock('verify-remove','PIN atual','Digite o PIN atual para remover.');
+$('pin-now').onclick=lockNow;
+$('helpbtn').onclick=()=>{$('setd').close();$('help').showModal()};
+$('helpok').onclick=()=>$('help').close();
+$('help').addEventListener('close',()=>{if(!cfg.seenHelp){cfg.seenHelp=true;saveCfg()}});
+const buzz=()=>{if(cfg.vib!==false&&navigator.vibrate){try{navigator.vibrate(30)}catch(e){}}};
+
+/* ---------- ler linhas coladas ---------- */
 function parse(line){
   let p;
   if(/\t|;|\|/.test(line))p=line.split(/\t|;|\|/);
@@ -356,19 +607,31 @@ function parse(line){
   const cs=$('ord').value==='cs';
   const codigo=clean(cs?a:b),senha=(cs?b:a).trim();
   if(!codigo||!senha)return null;
-  return {id:uid(),nome,codigo,senha};
+  return {nome,codigo,senha};
+}
+/* grava vários de uma vez, avisando dos códigos repetidos */
+function commit(rows,bad){
+  const seen=new Set(data.map(r=>r.codigo));let dups=0;
+  const flagged=rows.map(r=>{const d=seen.has(r.codigo);seen.add(r.codigo);if(d)dups++;return {r,d}});
+  let list=flagged;
+  if(dups>0&&!confirm(`${dups} cadastro(s) têm um código que já existe.\nOK = cadastrar todos mesmo assim\nCancelar = pular os repetidos`))list=flagged.filter(x=>!x.d);
+  const add=list.map(x=>({id:uid(),...x.r}));
+  data.push(...add);
+  if(add.length){save();$('addbox').open=false}
+  render();
+  const skipped=flagged.length-list.length;
+  toast(add.length?`${add.length} adicionado(s)`+(bad?` · ${bad} ignorado(s)`:'')+(skipped?` · ${skipped} repetido(s) pulado(s)`:''):'Nada foi adicionado');
 }
 function addText(txt){
-  let n=0,bad=0;
+  const rows=[];let bad=0;
   txt.split('\n').forEach(l=>{
     if(!l.trim())return;
     if(/nome/i.test(l)&&/senha/i.test(l))return;
     const r=parse(l);
-    if(r){data.push(r);n++}else bad++;
+    if(r)rows.push(r);else bad++;
   });
-  if(n){save();$('in').value='';$('addbox').open=false}
-  render();
-  toast(n?`${n} adicionado(s)`+(bad?` · ${bad} ignorado(s)`:''):'Nada reconhecido');
+  if(!rows.length){render();toast('Nada reconhecido');return}
+  $('in').value='';commit(rows,bad);
 }
 $('add').onclick=()=>addText($('in').value);
 $('paste').onclick=async()=>{
@@ -377,7 +640,7 @@ $('paste').onclick=async()=>{
 };
 $('ord').onchange=()=>{cfg.ord=$('ord').value;saveCfg()};
 
-/* planilha */
+/* ---------- planilha e PDF ---------- */
 async function inflate(u8){
   const ds=new DecompressionStream('deflate-raw');
   const w=ds.writable.getWriter();w.write(u8);w.close();
@@ -444,7 +707,8 @@ function csvRows(text){
   if(f!==''||row.length){row.push(f);rows.push(row)}
   return rows;
 }
-function addRows(rows){
+
+function rowsToClients(rows){
   rows=rows.filter(r=>r.some(c=>String(c).trim()));
   let ix=$('ord').value==='cs'?[0,1,2]:[0,2,1],start=0;
   for(let k=0;k<Math.min(5,rows.length);k++){
@@ -453,15 +717,18 @@ function addRows(rows){
     const hn=fi(/nome|cliente/i),hc=fi(/c[oó]digo|code|^id$/i),hs=fi(/senha|password/i);
     if(hs>=0&&(hn>=0||hc>=0)){start=k+1;ix=[hn>=0?hn:ix[0],hc>=0?hc:ix[1],hs];break}
   }
-  let n=0,bad=0;
+  const out=[];let bad=0;
   for(const r of rows.slice(start)){
     const nome=String(r[ix[0]]==null?'':r[ix[0]]).trim(),codigo=clean(r[ix[1]]),senha=String(r[ix[2]]==null?'':r[ix[2]]).trim();
     if(!nome||!codigo||!senha){bad++;continue}
-    data.push({id:uid(),nome,codigo,senha});n++;
+    out.push({nome,codigo,senha});
   }
-  if(n){save();$('addbox').open=false}
-  render();
-  toast(n?`${n} adicionado(s) do arquivo`+(bad?` · ${bad} ignorado(s)`:''):'Nada reconhecido no arquivo');
+  return {out,bad};
+}
+function addRows(rows){
+  const {out,bad}=rowsToClients(rows);
+  if(!out.length){toast('Nada reconhecido no arquivo');return}
+  commit(out,bad);
 }
 $('plb').onclick=()=>$('plan').click();
 $('plan').onchange=async e=>{
@@ -479,8 +746,6 @@ $('plan').onchange=async e=>{
     addRows(rows);
   }catch(err){toast('Não consegui ler. Use .xlsx ou .csv')}
 };
-
-/* pdf */
 let pdfjs=null;
 async function pdfRows(buf){
   if(!pdfjs){
@@ -518,6 +783,7 @@ async function pdfRows(buf){
   if(!any)throw new Error('semtexto');
   return rows;
 }
+
 $('pdfb').onclick=()=>$('pdf').click();
 $('pdf').onchange=async e=>{
   const f=e.target.files[0];e.target.value='';if(!f)return;
@@ -526,65 +792,98 @@ $('pdf').onchange=async e=>{
   catch(err){toast(err&&err.message==='semtexto'?'PDF sem texto (escaneado). Não dá para ler.':'Não consegui ler o PDF')}
 };
 
-/* novo cadastro (formulário fixo no topo) */
-const fn=$('fn'),fc=$('fc'),fs=$('fs');
-fc.addEventListener('input',()=>{const v=fc.value.replace(/\D/g,'');if(v!==fc.value)fc.value=v});
-[fn,fc,fs].forEach(el=>el.addEventListener('input',()=>el.closest('.frow').classList.remove('bad')));
-function ncOpen(o){$('nc').dataset.open=o;$('nct').textContent=o?'Recolher ▲':'Abrir ▼';$('nct').setAttribute('aria-expanded',o)}
-ncOpen(cfg.nc!==false);
-$('nct').onclick=()=>{const o=$('nc').dataset.open!=='true';cfg.nc=o;saveCfg();ncOpen(o)};
-function cadastrar(){
-  const nome=fn.value.trim().replace(/\s+/g,' '),codigo=clean(fc.value),senha=fs.value.trim();
-  const bad=!nome?[fn,'Digite o nome do cliente']:!codigo?[fc,'Digite o código (só números)']:!senha?[fs,'Digite a senha']:null;
-  if(bad){bad[0].closest('.frow').classList.add('bad');bad[0].focus();toast(bad[1]);return}
-  const dup=data.find(r=>r.codigo===codigo);
-  if(dup&&!confirm(`Já existe um cadastro com o código ${codigo} (${dup.nome}).\nCadastrar mesmo assim?`))return;
-  const r={id:uid(),nome,codigo,senha};
-  data.push(r);save();cur=r.id;
-  fn.value=fc.value=fs.value='';$('q').value='';
-  render();fn.focus();
-  toast('Cadastrado: '+nome);
-}
-$('nadd').onclick=cadastrar;
-fn.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fc.focus()}});
-fc.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fs.focus()}});
-fs.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();cadastrar()}});
-
-/* lista */
+/* ---------- lista ---------- */
 function view(){
   let l=data.map((r,i)=>({...r,n:i+1}));
   const q=$('q').value.trim().toLowerCase();
-  if(q)l=l.filter(r=>r.nome.toLowerCase().includes(q)||r.codigo.toLowerCase().includes(q));
+  if(q)l=l.filter(r=>r.nome.toLowerCase().includes(q)||r.codigo.includes(q)||(r.obs||'').toLowerCase().includes(q));
+  if(onlyFav)l=l.filter(r=>r.fav);
   if(cfg.mode==='a')l.sort((x,y)=>x.nome.localeCompare(y.nome,'pt-BR',{sensitivity:'base'}));
   if(cfg.mode==='u')l.reverse();
+  if(l.some(r=>r.fav))l=[...l.filter(r=>r.fav),...l.filter(r=>!r.fav)];
   return l;
 }
+const MASK='••••••••';
+const showing=id=>cfg.showPw===true||revealed.has(id);
+const shownPw=r=>showing(r.id)?r.senha:MASK;
 function render(scroll){
   const l=view();
   if(!l.some(r=>r.id===cur))cur=l.length?l[0].id:null;
-  const ic=n=>`<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
-  const q=$('q').value.trim();
-  $('list').innerHTML=l.length?l.map(r=>{const c=r.id===cur;return `<article class="card${c?' cur':''}" data-id="${r.id}"${c?' aria-current="true"':''}>
-<div class="ch"><span class="num">${r.n}</span><h3 class="cn">${esc(r.nome)}</h3></div>
+  const q=$('q').value.trim(),site=!!siteUrl();
+  $('list').innerHTML=l.length?l.map(r=>{
+    const c=r.id===cur,sh=showing(r.id);
+    return `<article class="card${c?' cur':''}" data-id="${r.id}"${c?' aria-current="true"':''}>
+<div class="ch"><span class="num">${r.n}</span><h3 class="cn">${esc(r.nome)}</h3><button type="button" class="star" data-a="fav" aria-pressed="${!!r.fav}" aria-label="${r.fav?'Tirar dos favoritos':'Marcar como favorito'}">${ic('star')}</button></div>
 <div class="tear"></div>
 <div class="fl">
 <button type="button" class="fld" data-f="codigo"><span class="k">${ic('hash')}Código</span><b>${esc(r.codigo)}</b><span class="cpi">${ic('copy')}</span></button>
-<button type="button" class="fld" data-f="senha"><span class="k">${ic('key')}Senha</span><b>${esc(r.senha)}</b><span class="cpi">${ic('copy')}</span></button>
+<div class="frc"><button type="button" class="fld" data-f="senha"><span class="k">${ic('key')}Senha</span><b>${esc(shownPw(r))}</b><span class="cpi">${ic('copy')}</span></button><button type="button" class="eye" data-a="eye" aria-label="${sh?'Esconder a senha':'Mostrar a senha'}">${ic(sh?'eyeoff':'eye')}</button></div>
 </div>
-<div class="ca"><button type="button" class="btn" data-a="e">${ic('edit')}Editar</button><button type="button" class="btn danger" data-a="d">${ic('trash')}Apagar</button></div>
-</article>`}).join(''):(data.length?`<div class="empty"><p>Nenhum cadastro encontrado para “${esc(q)}”.</p></div>`:`<div class="empty">${ic('plus')}<p>Nenhum cadastro ainda.<br>Preencha o nome, o código e a senha lá em cima e toque em Cadastrar.</p><button type="button" class="btn pri" data-a="open">Começar a cadastrar</button></div>`);
+${r.obs?`<p class="obs">${esc(r.obs)}</p>`:''}
+<div class="ca">${site?`<button type="button" class="btn wide" data-a="site">${ic('link')}Abrir site</button>`:''}<button type="button" class="btn" data-a="e">${ic('edit')}Editar</button><button type="button" class="btn danger" data-a="d">${ic('trash')}Apagar</button></div>
+</article>`}).join(''):(data.length?`<div class="empty"><p>${onlyFav&&!q?'Nenhum favorito ainda. Toque na estrela de um cliente.':'Nenhum cadastro encontrado'+(q?' para “'+esc(q)+'”':'')+'.'}</p></div>`:`<div class="empty">${ic('plus')}<p>Nenhum cadastro ainda.<br>Preencha o nome, o código e a senha lá em cima e toque em Cadastrar.</p><button type="button" class="btn pri" data-a="open">Começar a cadastrar</button></div>`);
   const i=l.findIndex(r=>r.id===cur),r=l[i];
   $('nm').textContent=r?r.nome:'Nenhum cliente selecionado';
   $('vc').textContent=r?r.codigo:'—';
-  $('vs').textContent=r?r.senha:'—';
+  $('vs').textContent=r?shownPw(r):'—';
   $('pos').textContent=r?`${i+1} de ${l.length}`:'';
-  $('totalTop').textContent=data.length;
-  $('cnt').textContent=q?`${l.length} de ${data.length} cadastros`:`${data.length} cadastro(s)`;
+  const sh=r&&showing(r.id);
+  $('peye').innerHTML=ic(sh?'eyeoff':'eye');$('peye').setAttribute('aria-label',sh?'Esconder a senha':'Mostrar a senha');$('peye').disabled=!r;
+  $('psite').hidden=!site||!r;
+  $('cnt').textContent=(q||onlyFav)?`${l.length} de ${data.length} cadastros`:`${data.length} cadastro(s)`;
   [['bo','o'],['ba','a'],['bu','u']].forEach(([id,m])=>{$(id).classList.toggle('on',cfg.mode===m);$(id).setAttribute('aria-pressed',cfg.mode===m)});
+  $('favf').setAttribute('aria-pressed',onlyFav);
+  renderRecent();renderBanners();
   if(scroll){const el=document.querySelector('.card.cur');el&&el.scrollIntoView({block:'nearest'})}
 }
 
-/* copiar */
+/* últimos copiados */
+function pushRecent(id){cfg.recent=[id,...(cfg.recent||[]).filter(x=>x!==id)].slice(0,5);saveCfg()}
+function renderRecent(){
+  const keep=(cfg.recent||[]).filter(id=>data.some(x=>x.id===id));
+  if(keep.length!==(cfg.recent||[]).length){cfg.recent=keep;saveCfg()}
+  const rec=(cfg.recent||[]).map(id=>data.find(x=>x.id===id)).filter(Boolean);
+  $('rec').hidden=!rec.length;
+  $('recl').innerHTML=rec.map(r=>`<button type="button" class="rc" data-r="${r.id}">${esc(r.nome)}</button>`).join('');
+}
+$('recl').onclick=e=>{
+  const b=e.target.closest('[data-r]');if(!b)return;
+  cur=b.dataset.r;$('q').value='';onlyFav=false;render(true);
+};
+$('favf').onclick=()=>{onlyFav=!onlyFav;render()};
+
+/* ---------- lembrete de backup ---------- */
+function backupBlob(){return new Blob([JSON.stringify(data)],{type:'application/json'})}
+function backupName(){return 'clientes-'+new Date().toISOString().slice(0,10)+'.json'}
+function markBackup(){cfg.lastBackup=Date.now();saveCfg();renderBanners()}
+function downloadBackup(){
+  const a=document.createElement('a');a.href=URL.createObjectURL(backupBlob());a.download=backupName();
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+  markBackup();
+}
+async function shareBackup(){
+  const f=new File([backupBlob()],backupName(),{type:'application/json'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){
+    try{await navigator.share({files:[f],title:'Backup de clientes'});markBackup();toast('Backup enviado');return}
+    catch(e){if(e&&e.name==='AbortError')return}
+  }
+  downloadBackup();toast('Este aparelho não envia arquivos daqui. O backup foi salvo em Downloads.');
+}
+function renderBanners(){
+  if(data.length&&!cfg.firstData){cfg.firstData=Date.now();saveCfg()}
+  const ref=cfg.lastBackup||cfg.firstData||Date.now(),days=Math.floor((Date.now()-ref)/864e5);
+  const snooze=cfg.bkSnooze&&Date.now()<cfg.bkSnooze;
+  const need=data.length>0&&!snooze&&days>=7;
+  $('bk').hidden=!need;
+  if(need)$('bkt').textContent=cfg.lastBackup?`Faz ${days} dias que você não salva um backup.`:'Você ainda não salvou nenhum backup da lista.';
+  $('lastbk').textContent=cfg.lastBackup?'Último backup: '+new Date(cfg.lastBackup).toLocaleDateString('pt-BR'):'Nenhum backup salvo ainda.';
+}
+$('bkgo').onclick=shareBackup;
+$('bklater').onclick=()=>{cfg.bkSnooze=Date.now()+3*864e5;saveCfg();renderBanners()};
+$('exp').onclick=()=>{downloadBackup();toast('Backup salvo')};
+$('shr').onclick=shareBackup;
+
+/* ---------- copiar ---------- */
 async function copy(v){
   try{await navigator.clipboard.writeText(v)}
   catch(e){const a=document.createElement('textarea');a.value=v;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}
@@ -597,7 +896,7 @@ function move(d){
 }
 async function copyField(f){
   const r=data.find(x=>x.id===cur);if(!r)return;
-  await copy(r[f]);
+  await copy(r[f]);buzz();pushRecent(r.id);renderRecent();
   const b=$(f==='codigo'?'bc':'bs');b.classList.add('ok');setTimeout(()=>b.classList.remove('ok'),450);
   const fe=document.querySelector(`.card.cur .fld[data-f="${f}"]`);
   if(fe){fe.classList.add('ok');setTimeout(()=>fe.classList.remove('ok'),450)}
@@ -607,48 +906,68 @@ $('bc').onclick=()=>copyField('codigo');
 $('bs').onclick=()=>copyField('senha');
 $('next').onclick=()=>move(1);
 $('prev').onclick=()=>move(-1);
+$('psite').onclick=openSite;
+$('peye').onclick=()=>{if(!cur)return;revealed.has(cur)?revealed.delete(cur):revealed.add(cur);render()};
 
-/* toque nos cartões */
+/* ---------- editar (formulário) ---------- */
+let editId=null;
+const edm=m=>{$('emsg').textContent=m||''};
+function readForm(n,c,s,show){
+  const nome=n.value.trim().replace(/\s+/g,' '),codigo=clean(c.value),senha=s.value.trim();
+  const bad=!nome?[n,'Digite o nome do cliente']:!codigo?[c,'Digite o código (só números)']:!senha?[s,'Digite a senha']:null;
+  if(bad){bad[0].closest('.frow').classList.add('bad');bad[0].focus();show(bad[1]);return null}
+  return {nome,codigo,senha};
+}
+function openEdit(id){
+  const r=data.find(x=>x.id===id);if(!r)return;
+  editId=id;$('en').value=r.nome;$('ec').value=r.codigo;$('es').value=r.senha;$('eo').value=r.obs||'';edm('');
+  $('ed').querySelectorAll('.frow').forEach(x=>x.classList.remove('bad'));
+  $('ed').showModal();
+}
+$('ec').addEventListener('input',()=>{const v=$('ec').value.replace(/\D/g,'');if(v!==$('ec').value)$('ec').value=v});
+['en','ec','es','eo'].forEach(id=>$(id).addEventListener('input',()=>{$(id).closest('.frow').classList.remove('bad');edm('')}));
+['en','ec','es'].forEach((id,k)=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$(['ec','es','eo'][k]).focus()}}));
+$('eo').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('esave').click()}});
+$('ecancel').onclick=()=>$('ed').close();
+$('esave').onclick=()=>{
+  const r=data.find(x=>x.id===editId);if(!r)return $('ed').close();
+  const v=readForm($('en'),$('ec'),$('es'),edm);if(!v)return;
+  const dup=data.find(x=>x.id!==r.id&&x.codigo===v.codigo);
+  if(dup&&!confirm(`Já existe outro cadastro com o código ${v.codigo} (${dup.nome}).\nSalvar mesmo assim?`))return;
+  r.nome=v.nome;r.codigo=v.codigo;r.senha=v.senha;
+  const o=$('eo').value.trim();if(o)r.obs=o;else delete r.obs;
+  save();$('ed').close();render();toast('Alterações salvas');
+};
+
+/* ---------- toque nos cartões ---------- */
 $('list').onclick=e=>{
   if(e.target.closest('[data-a=open]')){fn.focus();return}
   const card=e.target.closest('.card');if(!card)return;
-  const id=card.dataset.id,f=e.target.closest('.fld'),b=e.target.closest('button[data-a]');
+  const id=card.dataset.id,f=e.target.closest('.fld'),b=e.target.closest('button[data-a]'),a=b&&b.dataset.a;
   cur=id;
-  if(b&&b.dataset.a==='d'){
+  if(a==='fav'){const r=data.find(x=>x.id===id);r.fav=!r.fav;if(!r.fav)delete r.fav;save();render();return}
+  if(a==='eye'){revealed.has(id)?revealed.delete(id):revealed.add(id);render();return}
+  if(a==='site'){render();openSite();return}
+  if(a==='d'){
     const i=data.findIndex(x=>x.id===id),r=data[i];
     data.splice(i,1);save();render();
     toast('Cliente apagado','Desfazer',()=>{data.splice(i,0,r);save();render()});
     return;
   }
-  if(b&&b.dataset.a==='e'){
-    const r=data.find(x=>x.id===id);
-    const v=prompt('Nome ; Código ; Senha',`${r.nome} ; ${r.codigo} ; ${r.senha}`);
-    if(v){const p=v.split(';').map(s=>s.trim());if(p.length>=3){r.nome=p[0];r.codigo=clean(p[1]);r.senha=p.slice(2).join(';').trim();save()}else toast('Use: Nome ; Código ; Senha')}
-    render();return;
-  }
+  if(a==='e'){render();openEdit(id);return}
   render();
   if(f)copyField(f.dataset.f);
 };
 
-/* ordem */
+/* ---------- ordem, busca, limpar, restaurar ---------- */
 $('bo').onclick=()=>{cfg.mode='o';saveCfg();render(true)};
 $('ba').onclick=()=>{cfg.mode='a';saveCfg();render(true)};
 $('bu').onclick=()=>{cfg.mode='u';saveCfg();render(true)};
 $('q').oninput=()=>render();
-
-/* limpar e backup */
 $('clr').onclick=()=>{
-  if(!data.length||!confirm('Apagar TODOS os clientes?'))return;
+  if(!data.length||!confirm('Apagar TODOS os cadastros?'))return;
   const old=data;data=[];save();render();
   toast('Lista apagada','Desfazer',()=>{data=old;save();render()});
-};
-$('exp').onclick=()=>{
-  const b=new Blob([JSON.stringify(data)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(b);
-  a.download='clientes-'+new Date().toISOString().slice(0,10)+'.json';
-  document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
-  toast('Backup salvo');
 };
 $('impb').onclick=()=>$('imp').click();
 $('imp').onchange=async e=>{
@@ -656,15 +975,43 @@ $('imp').onchange=async e=>{
   try{
     const j=JSON.parse(await f.text());
     if(!Array.isArray(j))throw 0;
-    const ok=j.filter(r=>r&&r.nome!=null).map(r=>({id:uid(),nome:String(r.nome),codigo:clean(r.codigo),senha:String(r.senha==null?'':r.senha)}));
+    const ok=j.filter(r=>r&&r.nome!=null).map(r=>{const o={id:uid(),nome:String(r.nome),codigo:clean(r.codigo),senha:String(r.senha==null?'':r.senha)};if(r.obs)o.obs=String(r.obs);if(r.fav)o.fav=true;return o});
     if(!ok.length)throw 0;
     if(confirm(`Backup com ${ok.length} cliente(s).\nOK = SUBSTITUIR a lista atual\nCancelar = ADICIONAR no final`))data=ok;else data=data.concat(ok);
     save();render();toast('Backup restaurado');
   }catch(err){toast('Arquivo inválido')}
 };
 
-/* teclado (computador) */
+/* ---------- novo cadastro (formulário fixo no topo) ---------- */
+const fn=$('fn'),fc=$('fc'),fs=$('fs');
+fc.addEventListener('input',()=>{const v=fc.value.replace(/\D/g,'');if(v!==fc.value)fc.value=v});
+[fn,fc,fs].forEach(el=>el.addEventListener('input',()=>el.closest('.frow').classList.remove('bad')));
+function ncOpen(o){$('nc').dataset.open=o;$('nct').textContent=o?'Recolher ▲':'Abrir ▼';$('nct').setAttribute('aria-expanded',o)}
+ncOpen(cfg.nc!==false);
+$('nct').onclick=()=>{const o=$('nc').dataset.open!=='true';cfg.nc=o;saveCfg();ncOpen(o)};
+function cadastrar(){
+  const v=readForm(fn,fc,fs,toast);if(!v)return;
+  const dup=data.find(r=>r.codigo===v.codigo);
+  if(dup&&!confirm(`Já existe um cadastro com o código ${v.codigo} (${dup.nome}).\nCadastrar mesmo assim?`))return;
+  const r={id:uid(),...v};
+  data.push(r);save();cur=r.id;
+  fn.value=fc.value=fs.value='';$('q').value='';onlyFav=false;
+  render();fn.focus();
+  toast('Cadastrado: '+v.nome);
+}
+$('nadd').onclick=cadastrar;
+fn.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fc.focus()}});
+fc.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fs.focus()}});
+fs.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();cadastrar()}});
+
+/* ---------- teclado (computador) ---------- */
 document.addEventListener('keydown',e=>{
+  if(isLocked()){
+    if(/^\d$/.test(e.key))padKey(e.key);
+    else if(e.key==='Backspace')padKey('b');
+    return;
+  }
+  if(document.querySelector('dialog[open]'))return;
   const t=e.target.tagName;
   if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'){
     if(e.key==='Escape')e.target.blur();
@@ -681,10 +1028,24 @@ document.addEventListener('keydown',e=>{
 });
 
 render();
+refreshSettings();
+if(!cfg.seenHelp&&!hasPin())setTimeout(()=>{if(!isLocked()&&!document.querySelector('dialog[open]'))$('help').showModal()},400);
+
+/* ---------- instalação offline e aviso de nova versão ---------- */
 if('serviceWorker' in navigator){
-  const had=navigator.serviceWorker.controller;
-  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window._r){window._r=1;location.reload()}});
-  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{});
+  const had=navigator.serviceWorker.controller;let reloading=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!reloading){reloading=true;location.reload()}});
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(reg=>{
+    const offer=w=>{$('upd').hidden=false;$('updb').onclick=()=>w.postMessage('SKIP_WAITING')};
+    if(reg.waiting&&navigator.serviceWorker.controller)offer(reg.waiting);
+    reg.addEventListener('updatefound',()=>{
+      const w=reg.installing;if(!w)return;
+      w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)offer(w)});
+    });
+    const chk=()=>reg.update().catch(()=>{});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk()});
+    setInterval(chk,30*60*1000);
+  }).catch(()=>{});
 }
 </script>
 </body>

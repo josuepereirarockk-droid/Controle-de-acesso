@@ -1,15 +1,16 @@
-const C = 'clientes-v13', L = 'clientes-libs';
+const C = 'clientes-v14', L = 'clientes-libs';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 const LIBS = ['./pdf.min.mjs', './pdf.worker.min.mjs'];
 const isLib = u => /\/pdf(\.worker)?\.min\.mjs$/.test(new URL(u).pathname);
 self.addEventListener('install', e => {
+  // Sem skipWaiting aqui: a versão nova espera o usuário tocar em "Atualizar agora".
   e.waitUntil(Promise.all([
     caches.open(C).then(c => c.addAll(FILES.map(u => new Request(u, {cache: 'reload'})))),
     // bibliotecas do PDF ficam em cache próprio: baixam uma vez só, não a cada versão
     caches.open(L).then(c => Promise.all(LIBS.map(u => c.match(u).then(r => r || c.add(new Request(u, {cache: 'reload'})))))).catch(() => {})
   ]));
-  self.skipWaiting();
 });
+self.addEventListener('message', e => { if (e.data === 'SKIP_WAITING') self.skipWaiting(); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== C && x !== L).map(x => caches.delete(x)))).then(() => self.clients.claim()));
 });
